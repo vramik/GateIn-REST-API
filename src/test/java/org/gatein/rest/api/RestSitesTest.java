@@ -8,18 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.gatein.rest.constants.ConstantsService;
-import org.gatein.rest.helper.JSonParser;
+import static org.gatein.rest.constants.RestConstants.REST_API_URL;
 import org.gatein.rest.entity.Site;
+import org.gatein.rest.helper.JSonParser;
+import org.gatein.rest.service.api.HelpingServiceApi;
 import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
-import org.gatein.rest.service.api.HelpingServiceApi;
+import org.json.simple.parser.ParseException;
+import org.junit.Assert;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.json.simple.parser.ParseException;
-import org.junit.Assert;
 
 public class RestSitesTest {
 
@@ -27,7 +28,6 @@ public class RestSitesTest {
     private RestService restService;
     private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
-    private static final String REST_API_URL = "http:\\/\\/localhost:8080\\/rest\\/private\\/managed-components\\/api";
 
     @Before
     public void before() {
@@ -104,17 +104,16 @@ public class RestSitesTest {
     @Test
     public void testGetAllSites() throws ParseException {
         System.out.println("**testGetAllSites**");
-        String sites = restService.getAllSites("site");
-        List<Site> sitesList = jSonParser.sitesParser(sites);
-
+        
+        List<Site> sitesList = jSonParser.sitesParser(restService.getAllSites("site"));
         Assert.assertEquals(2, sitesList.size());
 
         restService.addSite("site1", "site");
         restService.addSite("site2", "site");
         restService.addSite("site3", "site");
         restService.addSite("site4", "site");
-        sites = restService.getAllSites("site");
-        sitesList = jSonParser.sitesParser(sites);
+        
+        sitesList = jSonParser.sitesParser(restService.getAllSites("site"));
         Assert.assertEquals(6, sitesList.size());
         
         restService.deleteSite("site1", "site");

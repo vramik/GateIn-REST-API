@@ -4,16 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.gatein.rest.constants.ConstantsService;
+import static org.gatein.rest.constants.RestConstants.REST_API_URL;
 import org.gatein.rest.entity.Site;
 import org.gatein.rest.helper.JSonParser;
+import org.gatein.rest.service.api.HelpingServiceApi;
 import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.junit.Before;
-import org.junit.Test;
+import org.json.simple.parser.ParseException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.json.simple.parser.ParseException;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -25,7 +26,6 @@ public class RestDashboardsTest {
     private RestService restService;
     private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
-    private static final String REST_API_URL = "http:\\/\\/localhost:8080\\/rest\\/private\\/managed-components\\/api";
 
     @Before
     public void before() {
