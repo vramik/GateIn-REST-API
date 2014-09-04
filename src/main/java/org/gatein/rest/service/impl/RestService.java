@@ -135,7 +135,6 @@ public class RestService implements RestServiceApi {
 
     @Override
     public String getNavigation(String siteType, String siteName, Boolean scope) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
 //            String append;
 //            if (scope) {
 //                append = "?scope=1";

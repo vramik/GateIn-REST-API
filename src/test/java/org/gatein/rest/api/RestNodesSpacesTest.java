@@ -174,6 +174,7 @@ public class RestNodesSpacesTest {
 
     @Test
     public void testDeleteNodes() throws ParseException {
+        System.out.println("**testDeleteNodes**");
         restService.createNode("newNode", "/platform/users", "space");
         restService.createNode("newNode2", "/platform/users", "space");
         restService.createNode("newNode3", "/platform/users", "space");
@@ -182,13 +183,13 @@ public class RestNodesSpacesTest {
         restService.deleteNode("newNode3", "/platform/users", "space");
 
         String navigationString = restService.getNavigation("space", "/platform/users", false);
+        
         Navigation navigation = jSonParser.navigationParser(navigationString);
+        
         assertTrue(navigation.getPriority().equals("8"));
         assertTrue(navigation.getSiteName().equals("/platform/users"));
         assertTrue(navigation.getSiteType().equals("space"));
-        Object[] pagesArray = navigation.getNodes().toArray();
 
-        assertEquals(pagesArray.length, 1);
-
+        assertEquals(navigation.getNodes().size(), 1);
     }
 }
