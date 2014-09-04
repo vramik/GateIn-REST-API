@@ -37,6 +37,7 @@ public class RestSpacesPagesTest {
 
     @Test
     public void testGetSpacePages() throws ParseException {
+        System.out.println("**testGetSpacePages**");
         String classicPages = restService.getSitePages("/platform/guests", "space");
         List<Page> pages = jSonParser.pagesParser(classicPages);
         Object[] pagesArray = pages.toArray();
@@ -123,10 +124,10 @@ public class RestSpacesPagesTest {
         assertTrue(((Page) pagesArray[1]).getURL().equals(REST_API_URL + "/spaces/platform/users/pages/mylink-fedora"));
 
     }
-//    
 
     @Test
     public void testGetPage() throws ParseException {
+        System.out.println("**testGetPage**");
         String page = restService.getPage("communityManagement", "platform/administrators", "space");
         Page comunityManagement = jSonParser.pageParser(page);
         assertTrue(comunityManagement.getName().equals("communityManagement"));
@@ -170,6 +171,7 @@ public class RestSpacesPagesTest {
     //addPagetoaddessites todo
     @Test
     public void testAddPageToAdminSite() throws ParseException {
+        System.out.println("**testAddPageToAdminSite**");
         restService.AddPageToSite("newPage4", "platform/administrators", "space");
         restService.AddPageToSite("newPage5", "platform/administrators", "space");
         restService.AddPageToSite("newPage3", "platform/administrators", "space");
@@ -196,16 +198,17 @@ public class RestSpacesPagesTest {
     }
 
     @Test
-    public void testGetNonexistingPage() {
+    public void testGetNonExistingPage() {
+        System.out.println("**testGetNonExistingPage**");
         String getResult = restService.getPage("nonPage", "platform/administrators", "space");
         assertTrue(getResult.contains("does not exist"));
-
     }
 
     @Test
     public void testUpdatePage() throws ParseException {
+        System.out.println("**testUpdatePage**");
         restService.AddPageToSite("newPage4", "platform/administrators", "space");
-        Map<String, String> attributeMap = new HashMap<String, String>();
+        Map<String, String> attributeMap = new HashMap<>();
         attributeMap.put("name", "newPage4");
         attributeMap.put("siteName", "platform/administrators");
         attributeMap.put("description", "Updated description");
@@ -273,6 +276,7 @@ public class RestSpacesPagesTest {
 
     @Test
     public void testDeletePages() throws ParseException {
+        System.out.println("**testDeletePages**");
         restService.AddPageToSite("newPage4", "platform/administrators", "space");
         restService.AddPageToSite("newPage5", "platform/administrators", "space");
         restService.AddPageToSite("newPage3", "platform/administrators", "space");
@@ -288,6 +292,5 @@ public class RestSpacesPagesTest {
             }
         }
         assertEquals(addedPages, 0);
-
     }
 }

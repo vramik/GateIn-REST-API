@@ -37,6 +37,7 @@ public class RestSitesPagesTest {
 
     @Test
     public void testGetSitesPages() throws ParseException {
+        System.out.println("**testGetSitesPages**");
         String classicPages = restService.getSitePages("classic", "site");
         List<Page> pages = jSonParser.pagesParser(classicPages);
         Object[] pagesArray = pages.toArray();
@@ -111,6 +112,7 @@ public class RestSitesPagesTest {
 
     @Test
     public void testGetPage() throws ParseException {
+        System.out.println("**testGetPage**");
         String page = restService.getPage("homepage", "classic", "site");
         Page homepage = jSonParser.pageParser(page);
         assertTrue(homepage.getName().equals("homepage"));
@@ -122,6 +124,7 @@ public class RestSitesPagesTest {
 
     @Test
     public void testAddPageToClassicSite() throws ParseException {
+        System.out.println("**testAddPageToClassicSite**");
         restService.AddPageToSite("newPage", "classic", "site");
         restService.AddPageToSite("newPage2", "classic", "site");
         restService.AddPageToSite("newPage3", "classic", "site");
@@ -150,6 +153,7 @@ public class RestSitesPagesTest {
 
     @Test
     public void testAddPageToMobileSite() throws ParseException {
+        System.out.println("**testAddPageToMobileSite**");
         restService.AddPageToSite("newPage", "mobile", "site");
         restService.AddPageToSite("newPage2", "mobile", "site");
         restService.AddPageToSite("newPage3", "mobile", "site");
@@ -176,7 +180,8 @@ public class RestSitesPagesTest {
     }
 
     @Test
-    public void testGetNonexistingPage() {
+    public void testGetNonExistingPage() {
+        System.out.println("**testGetNonExistingPage**");
         String getResult = restService.getPage("nonPage", "classic", "site");
         assertTrue(getResult.contains("does not exist"));
 
@@ -187,6 +192,7 @@ public class RestSitesPagesTest {
 
     @Test
     public void testUpdatePage() throws ParseException {
+        System.out.println("**testUpdatePage**");
         restService.AddPageToSite("newPage", "classic", "site");
         restService.AddPageToSite("newPage2", "classic", "site");
         restService.AddPageToSite("newPage3", "classic", "site");
@@ -195,7 +201,7 @@ public class RestSitesPagesTest {
         restService.AddPageToSite("newPage2", "mobile", "site");
         restService.AddPageToSite("newPage3", "mobile", "site");
 
-        Map<String, String> attributeMap = new HashMap<String, String>();
+        Map<String, String> attributeMap = new HashMap<>();
         attributeMap.put("name", "newPage");
         attributeMap.put("siteName", "classic");
         attributeMap.put("description", "Updated description");
@@ -253,6 +259,7 @@ public class RestSitesPagesTest {
 
     @Test
     public void testDeletePages() throws ParseException {
+        System.out.println("**testDeletePages**");
         restService.AddPageToSite("newPage", "classic", "site");
         restService.AddPageToSite("newPage2", "classic", "site");
         restService.AddPageToSite("newPage3", "classic", "site");

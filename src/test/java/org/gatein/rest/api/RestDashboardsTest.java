@@ -36,6 +36,7 @@ public class RestDashboardsTest {
 
     @Test
     public void testAddDashboards() throws ParseException {
+        System.out.println("**testAddDashboards**");
         restService.addSite("userDashboard", "dashboard");
         restService.addSite("userDashboard2", "dashboard");
         restService.addSite("userDashboard3", "dashboard");
@@ -45,7 +46,7 @@ public class RestDashboardsTest {
         int dashboardsCount = 0;
         for (Site site : dashSites) {
             if (site.getName().equals("userDashboard") || site.getName().equals("userDashboard2") || site.getName().equals("userDashboard3") || site.getName().equals("userDashboard4")) {
-                dashboardsCount = dashboardsCount + 1;
+                dashboardsCount++;
             }
         }
         assertEquals(dashboardsCount, 4);
@@ -69,6 +70,7 @@ public class RestDashboardsTest {
 
     @Test
     public void testGetDashboard() throws ParseException {
+        System.out.println("**testGetDashboard**");
         restService.addSite("userDashboard", "dashboard");
         restService.addSite("userDashboard2", "dashboard");
         restService.addSite("userDashboard3", "dashboard");
@@ -106,19 +108,21 @@ public class RestDashboardsTest {
     }
 
     @Test
-    public void getNonexistingDashboard() {
+    public void getNonExistingDashboard() {
+        System.out.println("**getNonExistingDashboard**");
         String rootSite = restService.getSite("nonDashboard", "dashboard");
         assertTrue(rootSite.contains("Site not found"));
     }
 
     @Test
     public void testUpdateDashboard() throws ParseException {
+        System.out.println("**testUpdateDashboard**");
         restService.addSite("userDashboard", "dashboard");
         restService.addSite("userDashboard2", "dashboard");
         restService.addSite("userDashboard3", "dashboard");
         restService.addSite("userDashboard4", "dashboard");
         Site rootDashboard;
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "userDashboard");
         attributes.put("type", "dashboard");
         attributes.put("displayName", "UpdatedUserDashboard");
@@ -147,6 +151,7 @@ public class RestDashboardsTest {
 
     @Test
     public void testDeleteDashboards() {
+        System.out.println("**testDeleteDashboards**");
         restService.addSite("userDashboard", "dashboard");
         restService.addSite("userDashboard2", "dashboard");
         restService.addSite("userDashboard3", "dashboard");

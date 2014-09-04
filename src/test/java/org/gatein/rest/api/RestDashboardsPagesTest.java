@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.gatein.rest.api;
 
 import java.util.HashMap;
@@ -40,6 +36,7 @@ public class RestDashboardsPagesTest {
 
     @Test
     public void testAddPageToSite() throws ParseException {
+        System.out.println("**testAddPageToSite**");
         restService.addSite("newDashboard", "dashboard");
         restService.AddPageToSite("addedPage", "newDashboard", "dashboard");
         restService.AddPageToSite("addedPage2", "newDashboard", "dashboard");
@@ -70,6 +67,7 @@ public class RestDashboardsPagesTest {
 
     @Test
     public void testGetDashboardsPages() throws ParseException {
+        System.out.println("**testGetDashboardsPages**");
         restService.addSite("newDashboard", "dashboard");
         restService.AddPageToSite("addedPage", "newDashboard", "dashboard");
         restService.AddPageToSite("addedPage2", "newDashboard", "dashboard");
@@ -101,6 +99,7 @@ public class RestDashboardsPagesTest {
 
     @Test
     public void testGetPage() throws ParseException {
+        System.out.println("**testGetPage**");
         restService.addSite("newDashboard", "dashboard");
         restService.AddPageToSite("addedPage", "newDashboard", "dashboard");
         restService.AddPageToSite("addedPage2", "newDashboard", "dashboard");
@@ -118,19 +117,20 @@ public class RestDashboardsPagesTest {
     }
 
     @Test
-    public void testGetNonexistingPage() {
+    public void testGetNonExistingPage() {
+        System.out.println("**testGetNonExistingPage**");
         String getResult = restService.getPage("nonPage", "root", "dashboard");
         assertTrue(getResult.contains("does not exist"));
-
     }
 
     @Test
     public void testUpdatePage() throws ParseException {
+        System.out.println("**testUpdatePage**");
         restService.addSite("newDashboard", "dashboard");
         restService.AddPageToSite("addedPage", "newDashboard", "dashboard");
         restService.AddPageToSite("addedPage2", "newDashboard", "dashboard");
         restService.AddPageToSite("addedPage3", "newDashboard", "dashboard");
-        Map<String, String> attributeMap = new HashMap<String, String>();
+        Map<String, String> attributeMap = new HashMap<>();
         attributeMap.put("name", "addedPage");
         attributeMap.put("siteName", "newDashboard");
         attributeMap.put("description", "Updated description");
@@ -187,6 +187,7 @@ public class RestDashboardsPagesTest {
 
     @Test
     public void testDeletePages() throws ParseException {
+        System.out.println("**testDeletePages**");
         restService.addSite("newDashboard", "dashboard");
         restService.AddPageToSite("addedPage", "newDashboard", "dashboard");
         restService.AddPageToSite("addedPage2", "newDashboard", "dashboard");

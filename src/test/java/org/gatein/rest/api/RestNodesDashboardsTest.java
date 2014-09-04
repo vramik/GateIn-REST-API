@@ -40,6 +40,7 @@ public class RestNodesDashboardsTest {
 
     @Test
     public void testAddNode() throws ParseException {
+        System.out.println("**testAddNode**");
         restService.addSite("mary", "dashboard");
         restService.createNode("newNode", "mary", "dashboard");
         restService.createNode("newNode2", "mary", "dashboard");
@@ -68,6 +69,7 @@ public class RestNodesDashboardsTest {
 
     @Test
     public void testGetNode() throws ParseException {
+        System.out.println("**testGetNode**");
         restService.addSite("mary", "dashboard");
         String node1 = restService.getNode("Tab_Default", "mary", "dashboard");
         assertNotNull(node1);
@@ -89,6 +91,7 @@ public class RestNodesDashboardsTest {
 
     @Test
     public void testNonExistingNode() {
+        System.out.println("**testNonExistingNode**");
         restService.addSite("mary", "dashboard");
         String node = restService.getNode("non", "mary", "dashboard");
         assertTrue(node.contains("Node /non does not exist"));
@@ -97,6 +100,7 @@ public class RestNodesDashboardsTest {
 
     @Test
     public void testGetNavigation() throws ParseException {
+        System.out.println("**testGetNavigation**");
         restService.addSite("mary", "dashboard");
         restService.createNode("newNode", "mary", "dashboard");
         restService.createNode("newNode2", "mary", "dashboard");
@@ -126,11 +130,12 @@ public class RestNodesDashboardsTest {
 
     @Test
     public void testUpdateNode() throws ParseException {
+        System.out.println("**testUpdateNode**");
         restService.addSite("mary", "dashboard");
         restService.createNode("newNode", "mary", "dashboard");
         restService.createNode("newNode2", "mary", "dashboard");
         restService.createNode("newNode3", "mary", "dashboard");
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "newNode");
         attributes.put("type", "dashboard");
 
@@ -184,6 +189,7 @@ public class RestNodesDashboardsTest {
 
     @Test
     public void testDeleteNodes() throws ParseException {
+        System.out.println("**testDeleteNodes**");
         restService.addSite("mary", "dashboard");
         restService.createNode("newNode", "mary", "dashboard");
         restService.createNode("newNode2", "mary", "dashboard");

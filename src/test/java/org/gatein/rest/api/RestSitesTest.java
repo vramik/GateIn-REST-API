@@ -37,6 +37,7 @@ public class RestSitesTest {
 
     @Test
     public void testGetClassicSite() throws ParseException {
+        System.out.println("**testGetClassicSite**");
         String site = restService.getSite("classic", "site");
         assertNotNull(site);
         System.out.println(site);
@@ -56,6 +57,7 @@ public class RestSitesTest {
 
     @Test
     public void testGetMobileSite() throws ParseException {
+        System.out.println("**testGetMobileSite**");
         String site = restService.getSite("mobile", "site");
         assertNotNull(site);
         Site mobile = jSonParser.siteParser(site);
@@ -73,12 +75,14 @@ public class RestSitesTest {
 
     @Test
     public void testNonExistingSite() {
+        System.out.println("**testNonExistingSite**");
         String site = restService.getSite("nonSite", "site");
         assertTrue(site.contains("Site not found for Site.Id[type=site, name=nonSite]"));
     }
 
     @Test
     public void testAddSite() throws ParseException {
+        System.out.println("**testAddSite**");
         restService.addSite("newSite", "site");
         String site = restService.getSite("newSite", "site");
         assertNotNull(site);
@@ -98,6 +102,7 @@ public class RestSitesTest {
 
     @Test
     public void testGetAllSites() throws ParseException {
+        System.out.println("**testGetAllSites**");
         String sites;
         List<Site> sitesList;
         int count = 0;
@@ -123,8 +128,9 @@ public class RestSitesTest {
 
     @Test
     public void testUpdateSite() throws ParseException {
+        System.out.println("**testUpdateSite**");
         Site classic;
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "classic");
         attributes.put("type", "site");
         attributes.put("displayName", "ClassicUpdated");
@@ -172,6 +178,7 @@ public class RestSitesTest {
 
     @Test
     public void testDeleteSites() {
+        System.out.println("**testDeleteSites**");
         restService.deleteSite("site1", "site");
         restService.deleteSite("site2", "site");
         restService.deleteSite("site3", "site");

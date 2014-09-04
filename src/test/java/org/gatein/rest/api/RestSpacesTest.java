@@ -38,6 +38,7 @@ public class RestSpacesTest {
 
     @Test
     public void testGetSpaces() throws ParseException {
+        System.out.println("**testGetSpaces**");
         String spaces = restService.getAllSites("space");
         List<Site> spaceSites = jSonParser.sitesParser(spaces);
         Object[] pagesArray = spaceSites.toArray();
@@ -58,6 +59,7 @@ public class RestSpacesTest {
 
     @Test
     public void testGetGuestsSite() throws ParseException {
+        System.out.println("**testGetGuestsSite**");
         String site = restService.getSite("/platform/guests", "space");
         assertNotNull(site);
         Site guests = jSonParser.siteParser(site);
@@ -71,11 +73,11 @@ public class RestSpacesTest {
         assertTrue((guests.getEditPermissions()).equals("[\"manager:\\/platform\\/guests\"]"));
         assertTrue((guests.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/guests\\/pages\"}"));
         assertTrue((guests.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/guests\\/navigation\"}"));
-
     }
 
     @Test
     public void testGetExecutiveBoardSite() throws ParseException {
+        System.out.println("**testGetExecutiveBoardSite**");
         String site = restService.getSite("/organization/management/executive-board", "space");
         assertNotNull(site);
         Site executive = jSonParser.siteParser(site);
@@ -89,11 +91,11 @@ public class RestSpacesTest {
         assertTrue((executive.getEditPermissions()).equals("[\"manager:\\/organization\\/management\\/executive-board\"]"));
         assertTrue((executive.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/organization\\/management\\/executive-board\\/pages\"}"));
         assertTrue((executive.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/organization\\/management\\/executive-board\\/navigation\"}"));
-
     }
 
     @Test
     public void testGetAdministratorsSite() throws ParseException {
+        System.out.println("**testGetAdministratorsSite**");
         String site = restService.getSite("/platform/administrators", "space");
         assertNotNull(site);
         Site administrators = jSonParser.siteParser(site);
@@ -112,6 +114,7 @@ public class RestSpacesTest {
 
     @Test
     public void testGetUsersSite() throws ParseException {
+        System.out.println("**testGetUsersSite**");
         String site = restService.getSite("/platform/users", "space");
         assertNotNull(site);
         Site users = jSonParser.siteParser(site);
@@ -130,6 +133,7 @@ public class RestSpacesTest {
 
     @Test
     public void testAddSpaces() throws ParseException {
+        System.out.println("**testAddSpaces**");
         restService.addSite("/platform/members", "space");
         restService.addSite("/platform/managers", "space");
         String dashboards = restService.getEmptySites("space");
@@ -158,17 +162,19 @@ public class RestSpacesTest {
     }
 
     @Test
-    public void getNonexistingSpace() {
+    public void getNonExistingSpace() {
+        System.out.println("**getNonExistingSpace**");
         String nonSite = restService.getSite("nonSpace", "space");
         assertTrue(nonSite.contains("Site not found"));
     }
 
     @Test
     public void testUpdateSpace() throws ParseException {
+        System.out.println("**testUpdateSpace**");
         restService.addSite("/platform/members", "space");
         restService.addSite("/platform/managers", "space");
         Site usersSpace;
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "/platform/users");
         attributes.put("type", "space");
         attributes.put("displayName", "UpdatedUsersSpace");
@@ -259,6 +265,7 @@ public class RestSpacesTest {
 
     @Test
     public void testDeleteSpaces() {
+        System.out.println("**testDeleteSpaces**");
         restService.addSite("/platform/members", "space");
         restService.addSite("/platform/managers", "space");
         restService.deleteSite("/platform/members", "space");

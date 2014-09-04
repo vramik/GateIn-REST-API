@@ -40,7 +40,7 @@ public class RestNodesSpacesTest {
 
     @Test
     public void testGetNode() throws ParseException {
-
+        System.out.println("**testGetNode**");
         String mylink = restService.getNode("mylink", "/platform/users", "space");
         assertNotNull(mylink);
         Node site = jSonParser.nodeParser(mylink);
@@ -62,12 +62,14 @@ public class RestNodesSpacesTest {
 
     @Test
     public void testNonExistingNode() {
+        System.out.println("**testNonExistingNode**");
         String node = restService.getNode("non", "/platform/users", "space");
         assertTrue(node.contains("Node /non does not exist"));
     }
 
     @Test
     public void testGetNavigation() throws ParseException {
+        System.out.println("**testGetNavigation**");
         String navigationString = restService.getNavigation("space", "/platform/users", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
         assertTrue(navigation.getPriority().equals("8"));
@@ -80,7 +82,7 @@ public class RestNodesSpacesTest {
 
     @Test
     public void testAddNode() throws ParseException {
-
+        System.out.println("**testAddNode**");
         restService.createNode("newNode", "/platform/users", "space");
         restService.createNode("newNode2", "/platform/users", "space");
         restService.createNode("newNode3", "/platform/users", "space");
@@ -113,6 +115,7 @@ public class RestNodesSpacesTest {
 
     @Test
     public void testGetNavigationOfAddedNodes() throws ParseException {
+        System.out.println("**testGetNavigationOfAddedNodes**");
         restService.createNode("newNode", "/platform/users", "space");
         restService.createNode("newNode2", "/platform/users", "space");
         restService.createNode("newNode3", "/platform/users", "space");
@@ -137,8 +140,8 @@ public class RestNodesSpacesTest {
 
     @Test
     public void testUpdateNode() throws ParseException {
-        Node home;
-        Map<String, String> attributes = new HashMap<String, String>();
+        System.out.println("**testUpdateNode**");
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "administration");
         attributes.put("type", "space");
 

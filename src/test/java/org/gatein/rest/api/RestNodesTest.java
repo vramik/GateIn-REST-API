@@ -41,9 +41,7 @@ public class RestNodesTest {
 
     @Test
     public void testGetNode() throws ParseException {
-
-
-
+        System.out.println("**testGetNode**");
         restService.AddPageToSite("assinedPage", "classic", "site");
         String siteMap = restService.getNode("sitemap", "classic", "site");
         assertNotNull(siteMap);
@@ -79,6 +77,7 @@ public class RestNodesTest {
 
     @Test
     public void testGetNodeOfAddedSite() throws ParseException {
+        System.out.println("**testGetNodeOfAddedSite**");
         restService.addSite("newSite", "site");
         String siteMap = restService.getNode("home", "newSite", "site");
         assertNotNull(siteMap);
@@ -99,12 +98,14 @@ public class RestNodesTest {
 
     @Test
     public void testNonExistingNode() {
+        System.out.println("**testNonExistingNode**");
         String node = restService.getNode("non", "classic", "site");
         assertTrue(node.contains("Node /non does not exist"));
     }
 
     @Test
     public void testGetNavigation() throws ParseException {
+        System.out.println("**testGetNavigation**");
         String navigationString = restService.getNavigation("site", "classic", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
         assertTrue(navigation.getPriority().equals("1"));
@@ -120,6 +121,7 @@ public class RestNodesTest {
 
     @Test
     public void testGetNavigationOfAddedSite() throws ParseException {
+        System.out.println("**testGetNavigationOfAddedSite**");
         restService.addSite("newSite", "site");
         String navigationString = restService.getNavigation("site", "newSite", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
@@ -134,13 +136,12 @@ public class RestNodesTest {
 
     @Test
     public void testAddNode() throws ParseException {
+        System.out.println("**testAddNode**");
         restService.createNode("newNode", "classic", "site");
         restService.createNode("newNode2", "classic", "site");
         restService.createNode("newNode3", "classic", "site");
         String navigationString = restService.getNavigation("site", "classic", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        int pagesCount = navigation.getNodes().size();
-
 
         String node = restService.getNode("newNode", "classic", "site");
         assertNotNull(node);
@@ -172,6 +173,7 @@ public class RestNodesTest {
 
     @Test
     public void testGetNavigationOfAddedNodes() throws ParseException {
+        System.out.println("**testGetNavigationOfAddedNodes**");
         restService.createNode("newNode", "classic", "site");
         restService.createNode("newNode2", "classic", "site");
         restService.createNode("newNode3", "classic", "site");
@@ -199,6 +201,7 @@ public class RestNodesTest {
 
     @Test
     public void testAssignPageToNode() throws ParseException {
+        System.out.println("**testAssignPageToNode**");
         restService.createNode("newNode", "classic", "site");
         restService.createNode("newNode2", "classic", "site");
         restService.createNode("newNode3", "classic", "site");
@@ -232,8 +235,8 @@ public class RestNodesTest {
 
     @Test
     public void testUpdateNode() throws ParseException {
-        Node home;
-        Map<String, String> attributes = new HashMap<String, String>();
+        System.out.println("**testUpdateNode**");
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "home");
         attributes.put("type", "site");
         attributes.put("isVisible", "false");
@@ -282,6 +285,7 @@ public class RestNodesTest {
 
     @Test
     public void testDeleteSites() throws ParseException {
+        System.out.println("**testDeleteSites**");
         restService.createNode("newNode", "classic", "site");
         restService.createNode("newNode2", "classic", "site");
         restService.createNode("newNode3", "classic", "site");
