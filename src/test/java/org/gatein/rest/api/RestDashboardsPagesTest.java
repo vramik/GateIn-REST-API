@@ -4,20 +4,15 @@
  */
 package org.gatein.rest.api;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Page;
 import org.gatein.rest.helper.JSonParser;
 import org.gatein.rest.service.api.HelpingServiceApi;
 import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -31,7 +26,6 @@ import org.json.simple.parser.ParseException;
  */
 public class RestDashboardsPagesTest {
 
-    private CloseableHttpClient httpclient;
     private HelpingServiceApi helpingService;
     private RestService restService;
     private ConstantsService constantsService;
@@ -40,11 +34,8 @@ public class RestDashboardsPagesTest {
     @Before
     public void before() {
         helpingService = new HelpingService();
-        httpclient = helpingService.httpClientAuthenticationRootAny();
         constantsService = new ConstantsService();
-        restService = new RestService(httpclient, helpingService, constantsService);
-
-
+        restService = new RestService(helpingService, constantsService);
     }
 
     @Test
@@ -214,14 +205,5 @@ public class RestDashboardsPagesTest {
         }
         assertEquals(addedPages, 0);
         restService.deleteSite("newDashboard", "dashboard");
-    }
-
-    @After
-    public void after() {
-        try {
-            httpclient.close();
-        } catch (IOException ex) {
-            Logger.getLogger(RestDashboardsPagesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

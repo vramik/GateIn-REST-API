@@ -14,13 +14,13 @@ public interface HelpingServiceApi {
     
     CloseableHttpClient httpClientAuthenticationRootAny();   
     
-    String getHttpRequest(String httpUrl, CloseableHttpClient httpClient);
+    String getHttpRequest(String httpUrl);
     
-    void deleteHttpRequest(String httpUrl, CloseableHttpClient httpClient);
+    void deleteHttpRequest(String httpUrl);
     
-    void addHttpRequest(String httpUrl, CloseableHttpClient httpClient);
+    void postHttpRequest(String httpUrl);
     
-    void updateHttpRequest(String httpUrl, CloseableHttpClient httpClient, String entityUpdate);
+    void postHttpRequest(String httpUrl, String entityUpdate);
     
-    void updateHttpRequestAllSitesUpdateAtOnce(String httpUrl, CloseableHttpClient httpClient, File file);
+    void postHttpRequestAllSitesUpdateAtOnce(String httpUrl, File file);
 }

@@ -1,21 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.gatein.rest.api;
 
 /**
  *
  * @author mgottval
  */
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.http.HttpEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.helper.JSonParser;
 import org.gatein.rest.entity.Site;
@@ -27,15 +18,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.After;
 import org.json.simple.parser.ParseException;
 
 public class RestSitesTest {
 
-    private CloseableHttpClient httpclient;
     private HelpingServiceApi helpingService;
     private RestService restService;
-    private HttpEntity entity;
     private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
     private static final String REST_API_URL = "http:\\/\\/localhost:8080\\/rest\\/private\\/managed-components\\/api";
@@ -43,10 +31,8 @@ public class RestSitesTest {
     @Before
     public void before() {
         helpingService = new HelpingService();
-        httpclient = helpingService.httpClientAuthenticationRootAny();
         constantsService = new ConstantsService();
-        restService = new RestService(httpclient, helpingService, constantsService);
-
+        restService = new RestService(helpingService, constantsService);
     }
 
     @Test
@@ -190,14 +176,5 @@ public class RestSitesTest {
         restService.deleteSite("site2", "site");
         restService.deleteSite("site3", "site");
         restService.deleteSite("site4", "site");
-    }
-
-    @After
-    public void after() {
-        try {
-            httpclient.close();
-        } catch (IOException ex) {
-            Logger.getLogger(RestSitesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

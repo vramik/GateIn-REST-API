@@ -23,8 +23,6 @@ import org.junit.Test;
  */
 public class AddDashboards {
     
-    private CloseableHttpClient httpClient;
-    private CloseableHttpClient httpClientMary;
     private HelpingServiceApi helpingService;
     private RestService restService;
     private ConstantsService constantsService;
@@ -33,10 +31,8 @@ public class AddDashboards {
     @Before
     public void before() {
         helpingService = new HelpingService();
-        httpClientMary = helpingService.httpClientAuthenticationAny("mary", "gtn");
-        httpClient = helpingService.httpClientAuthenticationRootAny();
         constantsService = new ConstantsService();
-        restService = new RestService(httpClient, helpingService, constantsService);
+        restService = new RestService(helpingService, constantsService);
         
         restService.addSite("mary", "dashboard");
         restService.addSite("john", "dashboard");
@@ -49,14 +45,5 @@ public class AddDashboards {
         String allSites = restService.getAllSites("dashboard");
         List<Site> dashboardList = jSonParser.sitesParser(allSites);
         assertEquals(4, dashboardList.size());
-    }
-    
-    @After
-    public void after() {
-        try {
-            httpClient.close();
-        } catch (IOException ex) {
-            Logger.getLogger(AddDashboards.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

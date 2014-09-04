@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.gatein.rest.update;
 
 import java.io.IOException;
@@ -34,19 +29,16 @@ import org.junit.Test;
  */
 public class RestUpdateMoreGroups {
 
-    private CloseableHttpClient httpclient;
     private HelpingServiceApi helpingService;
     private RestService restService;
-    private HttpEntity entity;
     private ConstantsService constantsService;
-    private JSonParser jSonParser = new JSonParser();
+    private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
         helpingService = new HelpingService();
-        httpclient = helpingService.httpClientAuthenticationRootAny();
         constantsService = new ConstantsService();
-        restService = new RestService(httpclient, helpingService, constantsService);
+        restService = new RestService(helpingService, constantsService);
 
     }
 
@@ -181,14 +173,5 @@ public class RestUpdateMoreGroups {
             execBoardNavigationNodeNames.add(node.getName());
         }
         assertTrue(execBoardNavigationNodeNames.contains("newlinks"));
-    }
-
-    @After
-    public void after() {
-        try {
-            httpclient.close();
-        } catch (IOException ex) {
-            Logger.getLogger(RestUpdateMoreGroups.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

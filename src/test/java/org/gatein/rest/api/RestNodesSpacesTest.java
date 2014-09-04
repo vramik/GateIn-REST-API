@@ -1,17 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.gatein.rest.api;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.http.HttpEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Navigation;
 import org.gatein.rest.entity.Node;
@@ -20,7 +11,6 @@ import org.gatein.rest.helper.JSonParser;
 import org.gatein.rest.service.api.HelpingServiceApi;
 import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
-import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -36,21 +26,16 @@ import org.json.simple.parser.ParseException;
  */
 public class RestNodesSpacesTest {
 
-    private CloseableHttpClient httpclient;
     private HelpingServiceApi helpingService;
     private RestService restService;
-    private HttpEntity entity;
     private ConstantsService constantsService;
-    private JSonParser jSonParser = new JSonParser();
+    private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
         helpingService = new HelpingService();
-        httpclient = helpingService.httpClientAuthenticationRootAny();
         constantsService = new ConstantsService();
-        restService = new RestService(httpclient, helpingService, constantsService);
-
-
+        restService = new RestService(helpingService, constantsService);
     }
 
     @Test
@@ -73,8 +58,6 @@ public class RestNodesSpacesTest {
 
 
         assertTrue(site.getPage() == null);
-
-
     }
 
     @Test
@@ -93,7 +76,6 @@ public class RestNodesSpacesTest {
         Object[] pagesArray = navigation.getNodes().toArray();
         assertTrue(((Node) pagesArray[0]).getName().equals("mylink"));
         assertTrue(((Node) pagesArray[0]).getUri().equals(REST_API_URL + "/spaces/platform/users/navigation/mylink"));
-
     }
 
     @Test
@@ -205,14 +187,5 @@ public class RestNodesSpacesTest {
 
         assertEquals(pagesArray.length, 1);
 
-    }
-
-    @After
-    public void after() {
-        try {
-            httpclient.close();
-        } catch (IOException ex) {
-            Logger.getLogger(RestNodesSpacesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

@@ -1,7 +1,6 @@
 package org.gatein.rest.service.impl;
 
 import java.util.Map;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.gatein.rest.constants.ConstantsService;
 import static org.gatein.rest.constants.RestConstants.REST_API_URL;
 import org.gatein.rest.service.api.HelpingServiceApi;
@@ -9,78 +8,64 @@ import org.gatein.rest.service.api.RestServiceApi;
 
 /**
  *
- * @author mgottval
+ * @author vramik
  */
 public class RestService implements RestServiceApi {
 
     private HelpingServiceApi helpingService;
     private ConstantsService constantsService;
-    private CloseableHttpClient httpclient;
 
     public RestService() {
     }
 
-    public RestService(CloseableHttpClient httpclient, HelpingServiceApi helpingService, ConstantsService constantsService) {
-        this.httpclient = httpclient;
+    public RestService(HelpingServiceApi helpingService, ConstantsService constantsService) {
         this.helpingService = helpingService;
         this.constantsService = constantsService;
     }
 
     @Override
     public void addSite(String siteName, String siteType) {
-//        httpclient = helpingService.httpClientAuthenticationRootAny();
-        helpingService.addHttpRequest(constantsService.createSiteUrl(siteType, siteName), httpclient);
+        helpingService.postHttpRequest(constantsService.createSiteUrl(siteType, siteName));
     }
 
     @Override
     public String getSite(String siteName, String siteType) {
-//        helpingService.httpClientAuthenticationRootAny();
-        return helpingService.getHttpRequest(constantsService.createSiteUrl(siteType, siteName), httpclient);
-
+        return helpingService.getHttpRequest(constantsService.createSiteUrl(siteType, siteName));
     }
 
     @Override
     public void AddPageToSite(String pageName, String siteName, String siteType) {
-
-//        helpingService.httpClientAuthenticationRootAny();
-        helpingService.addHttpRequest(constantsService.createPageUrl(siteType, siteName, pageName), httpclient);
+        helpingService.postHttpRequest(constantsService.createPageUrl(siteType, siteName, pageName));
     }
 
     @Override
     public String getPage(String pagename, String siteName, String siteType) {
-//        helpingService.httpClientAuthenticationRootAny();
-        return helpingService.getHttpRequest(constantsService.createPageUrl(siteType, siteName, pagename), httpclient);
+        return helpingService.getHttpRequest(constantsService.createPageUrl(siteType, siteName, pagename));
     }
 
     @Override
     public String getAllSites(String siteType) {
-//        helpingService.httpClientAuthenticationRootAny();
-        return helpingService.getHttpRequest(REST_API_URL + "/" + siteType + "s", httpclient);
+        return helpingService.getHttpRequest(REST_API_URL + "/" + siteType + "s");
     }
 
     @Override
     public String getEmptySites(String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        return helpingService.getHttpRequest(REST_API_URL + "/" + siteType + "s?emptySites=true&limit=30", httpclient);
+        return helpingService.getHttpRequest(REST_API_URL + "/" + siteType + "s?emptySites=true&limit=30");
     }
 
     @Override
     public String getSitePages(String siteName, String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        return helpingService.getHttpRequest(constantsService.createPageUrl(siteType, siteName, ""), httpclient);
-
+        return helpingService.getHttpRequest(constantsService.createPageUrl(siteType, siteName, ""));
     }
 
     @Override
     public void deleteSite(String siteName, String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.deleteHttpRequest(constantsService.createSiteUrl(siteType, siteName), httpclient);
+        helpingService.deleteHttpRequest(constantsService.createSiteUrl(siteType, siteName));
     }
 
     @Override
     public void deletePage(String sitename, String pageName, String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.deleteHttpRequest(constantsService.createPageUrl(siteType, sitename, pageName), httpclient);
+        helpingService.deleteHttpRequest(constantsService.createPageUrl(siteType, sitename, pageName));
     }
 
     @Override
@@ -107,20 +92,17 @@ public class RestService implements RestServiceApi {
 
         }
         entityUpdate = entityUpdate.substring(0, entityUpdate.length() - 1) + "}";
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.updateHttpRequest(constantsService.createSiteUrl(siteType, siteName), httpclient, entityUpdate);
+        helpingService.postHttpRequest(constantsService.createSiteUrl(siteType, siteName), entityUpdate);
     }
 
     @Override
     public void updateSite(String entityUpdate, String siteName, String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.updateHttpRequest(constantsService.createSiteUrl(siteType, siteName), httpclient, entityUpdate);
+        helpingService.postHttpRequest(constantsService.createSiteUrl(siteType, siteName), entityUpdate);
     }
 
     @Override
     public void updateNode(String entityUpdate, String siteName, String siteType, String nodeName) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.updateHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), httpclient, entityUpdate);
+        helpingService.postHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), entityUpdate);
     }
 
     @Override
@@ -148,8 +130,7 @@ public class RestService implements RestServiceApi {
         }
         entityUpdate = entityUpdate.substring(0, entityUpdate.length() - 1) + "}";
 
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.updateHttpRequest(constantsService.createPageUrl(siteType, siteName, pageName), httpclient, entityUpdate);
+        helpingService.postHttpRequest(constantsService.createPageUrl(siteType, siteName, pageName), entityUpdate);
     }
 
     @Override
@@ -161,33 +142,29 @@ public class RestService implements RestServiceApi {
 //            } else {
 //                append = "";
 //            }
-        return helpingService.getHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, ""), httpclient);
+        return helpingService.getHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, ""));
 
     }
 
     @Override
     public String getNavigationNode(String siteType, String siteName, String node) {
-        return helpingService.getHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, node), httpclient);
+        return helpingService.getHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, node));
     }
 
-//
     @Override
     public String getNode(String nodeName, String siteName, String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        return helpingService.getHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), httpclient);
+        return helpingService.getHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName));
 
     }
 
     @Override
     public void createNode(String nodeName, String siteName, String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.addHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), httpclient);
+        helpingService.postHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName));
     }
 
     @Override
     public void deleteNode(String nodeName, String siteName, String siteType) {
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.deleteHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), httpclient);
+        helpingService.deleteHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName));
     }
 
     @Override
@@ -215,22 +192,17 @@ public class RestService implements RestServiceApi {
 
         entityUpdate = entityUpdate.substring(0, entityUpdate.length() - 1) + "}";
 
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.updateHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), httpclient, entityUpdate);
+        helpingService.postHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), entityUpdate);
     }
 
     @Override
     public void updateNodesPage(String nodesJSonPage, String siteName, String siteType, String nodeName) {
 
-        // helpingService.httpClientAuthenticationRootAny(httpclient);
-        helpingService.updateHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), httpclient, nodesJSonPage);
+        helpingService.postHttpRequest(constantsService.createNavigationNodeUrl(siteType, siteName, nodeName), nodesJSonPage);
     }
 
     @Override
     public void updatePage(String json, String siteType, String siteName, String pageName) {
-
-        // // helpingService.httpClientAuthenticationRootAny(httpclient);
-        //  helpingService.updateHttpRequest(constantsService.createPageUrl(siteType, siteName, pageName), httpclient, entity, json);
-        helpingService.updateHttpRequest(REST_API_URL + "/" + siteType + "s/" + siteName + "/pages/" + pageName, httpclient, json);
+        helpingService.postHttpRequest(REST_API_URL + "/" + siteType + "s/" + siteName + "/pages/" + pageName, json);
     }
 }

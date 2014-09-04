@@ -1,18 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.gatein.rest.update;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.http.HttpEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Navigation;
 import org.gatein.rest.entity.Node;
@@ -23,7 +12,6 @@ import org.gatein.rest.service.api.HelpingServiceApi;
 import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import org.json.simple.parser.ParseException;
-import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -35,19 +23,16 @@ import org.junit.Test;
  */
 public class RestUpdatePortalAll {
 
-    private CloseableHttpClient httpclient;
     private HelpingServiceApi helpingService;
     private RestService restService;
-    private HttpEntity entity;
     private ConstantsService constantsService;
-    private JSonParser jSonParser = new JSonParser();
+    private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
         helpingService = new HelpingService();
-        httpclient = helpingService.httpClientAuthenticationRootAny();
         constantsService = new ConstantsService();
-        restService = new RestService(httpclient, helpingService, constantsService);
+        restService = new RestService(helpingService, constantsService);
 
     }
 
@@ -131,14 +116,5 @@ public class RestUpdatePortalAll {
         String featuresPageString = restService.getPage("features", "mobile", "site");
         Page featuresPage = jSonParser.pageParser(featuresPageString);
         assertEquals("GateIn Features", featuresPage.getDisplayName());
-    }
-
-    @After
-    public void after() {
-        try {
-            httpclient.close();
-        } catch (IOException ex) {
-            Logger.getLogger(RestUpdatePortalAll.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

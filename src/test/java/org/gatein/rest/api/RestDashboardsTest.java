@@ -1,24 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.gatein.rest.api;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.http.HttpEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Site;
 import org.gatein.rest.helper.JSonParser;
 import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import org.gatein.rest.service.api.HelpingServiceApi;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -31,21 +21,17 @@ import org.json.simple.parser.ParseException;
  */
 public class RestDashboardsTest {
 
-    private CloseableHttpClient httpclient;
     private HelpingServiceApi helpingService;
     private RestService restService;
-    private HttpEntity entity;
     private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
     private static final String REST_API_URL = "http:\\/\\/localhost:8080\\/rest\\/private\\/managed-components\\/api";
 
     @Before
     public void before() {
-       helpingService = new HelpingService();
-        httpclient = helpingService.httpClientAuthenticationRootAny();
+        helpingService = new HelpingService();
         constantsService = new ConstantsService();
-        restService = new RestService(httpclient, helpingService, constantsService);
-
+        restService = new RestService(helpingService, constantsService);
     }
 
     @Test
@@ -72,7 +58,7 @@ public class RestDashboardsTest {
         assertTrue(userDashboard.getSkin().equals("Default"));
         assertTrue(userDashboard.getLocale().equals("en"));
         assertTrue(userDashboard.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(userDashboard.getEditPermissions().equals("[\"userDashboard\"]")); 
+        assertTrue(userDashboard.getEditPermissions().equals("[\"userDashboard\"]"));
         assertTrue(userDashboard.getPages().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/pages\"}"));
         assertTrue(userDashboard.getNavigation().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/navigation\"}"));
         restService.deleteSite("userDashboard", "dashboard");
@@ -105,7 +91,7 @@ public class RestDashboardsTest {
         assertTrue(userDashboard.getName().equals("userDashboard2"));
         assertTrue(userDashboard.getType().equals("dashboard"));
 //        assertNull(userDashboard.getDisplayName());
-              assertTrue(userDashboard.getDescription().equals("null"));
+        assertTrue(userDashboard.getDescription().equals("null"));
         assertTrue(userDashboard.getSkin().equals("Default"));
         assertTrue(userDashboard.getLocale().equals("en"));
         assertTrue(userDashboard.getAccessPermissions().equals("[\"Everyone\"]"));
@@ -169,14 +155,5 @@ public class RestDashboardsTest {
         restService.deleteSite("userDashboard2", "dashboard");
         restService.deleteSite("userDashboard3", "dashboard");
         restService.deleteSite("userDashboard4", "dashboard");
-    }
-
-    @After
-    public void after() {
-        try {
-            httpclient.close();
-        } catch (IOException ex) {
-            Logger.getLogger(RestDashboardsTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }
