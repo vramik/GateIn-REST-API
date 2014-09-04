@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.json.simple.parser.ParseException;
+import org.junit.Assert;
 
 public class RestSitesTest {
 
@@ -103,15 +104,10 @@ public class RestSitesTest {
     @Test
     public void testGetAllSites() throws ParseException {
         System.out.println("**testGetAllSites**");
-        String sites;
-        List<Site> sitesList;
-        int count = 0;
-        sites = restService.getAllSites("site");
-        sitesList = jSonParser.sitesParser(sites);
-        for (Site site : sitesList) {
-            count = count + 1;
-        }
-        assertTrue(count == 2);
+        String sites = restService.getAllSites("site");
+        List<Site> sitesList = jSonParser.sitesParser(sites);
+
+        Assert.assertEquals(2, sitesList.size());
 
         restService.addSite("site1", "site");
         restService.addSite("site2", "site");
@@ -119,11 +115,12 @@ public class RestSitesTest {
         restService.addSite("site4", "site");
         sites = restService.getAllSites("site");
         sitesList = jSonParser.sitesParser(sites);
-        count = 0;
-        for (Site site : sitesList) {
-            count = count + 1;
-        }
-        assertTrue(count == 6);
+        Assert.assertEquals(6, sitesList.size());
+        
+        restService.deleteSite("site1", "site");
+        restService.deleteSite("site2", "site");
+        restService.deleteSite("site3", "site");
+        restService.deleteSite("site4", "site");
     }
 
     @Test
@@ -179,6 +176,10 @@ public class RestSitesTest {
     @Test
     public void testDeleteSites() {
         System.out.println("**testDeleteSites**");
+        restService.addSite("site1", "site");
+        restService.addSite("site2", "site");
+        restService.addSite("site3", "site");
+        restService.addSite("site4", "site");
         restService.deleteSite("site1", "site");
         restService.deleteSite("site2", "site");
         restService.deleteSite("site3", "site");

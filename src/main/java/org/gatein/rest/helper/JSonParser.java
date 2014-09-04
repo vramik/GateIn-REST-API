@@ -44,8 +44,8 @@ public class JSonParser {
             String[] attributesArray = nodes.split("(?<=}),");
             attributes = new ArrayList<>();
             Attribute attribute;
-            for (int i = 0; i < attributesArray.length; i++) {
-                JSONObject jsonAttr = (JSONObject) new JSONParser().parse(attributesArray[i]);
+            for (String attributeFromArray : attributesArray) {
+                JSONObject jsonAttr = (JSONObject) new JSONParser().parse(attributeFromArray);
                 attribute = new Attribute();
                 attribute.setKey(jsonAttr.get("key").toString());
                 attribute.setValue(jsonAttr.get("value").toString());
@@ -54,7 +54,7 @@ public class JSonParser {
         }
         site.setAttributes(attributes);
         site.setPages(json.get("pages").toString());
-        site.setNavigation(json.get("navigation").toString().toString());
+        site.setNavigation(json.get("navigation").toString());
 
         return site;
     }
@@ -78,13 +78,13 @@ public class JSonParser {
     }
 
     public List<Page> pagesParser(String jSonPages) throws ParseException {
-        List<Page> pagesList = new ArrayList<Page>();
+        List<Page> pagesList = new ArrayList<>();
         Page page;
         JSONObject json;
 
         String[] sitesArray = jSonPages.replace("[", "").replace("]", "").split("(?<=}),");
-        for (int i = 0; i < sitesArray.length; i++) {
-            json = (JSONObject) new JSONParser().parse(sitesArray[i]);
+        for (String site : sitesArray) {
+            json = (JSONObject) new JSONParser().parse(site);
             page = new Page();
             page.setName(json.get("name").toString());
             page.setSiteType(json.get("siteType").toString());
@@ -97,13 +97,13 @@ public class JSonParser {
     }
 
     public List<Site> sitesParser(String jSonSites) throws ParseException {
-        List<Site> sitesList = new ArrayList<Site>();
+        List<Site> sitesList = new ArrayList<>();
         Site site;
         JSONObject json;
 
         String[] sitesArray = jSonSites.replace("[", "").replace("]", "").split("(?<=}),");
-        for (int i = 0; i < sitesArray.length; i++) {
-            json = (JSONObject) new JSONParser().parse(sitesArray[i]);
+        for (String sitesFromArray : sitesArray) {
+            json = (JSONObject) new JSONParser().parse(sitesFromArray);
             site = new Site();
             site.setName(json.get("name").toString());
             site.setType(json.get("type").toString());
@@ -123,7 +123,7 @@ public class JSonParser {
 
         node.setName(json.get("name").toString());
         node.setUri(json.get("uri").toString());
-        node.setIsVisible(String.valueOf(json.get("isVisible")).toString());
+        node.setIsVisible(String.valueOf(json.get("isVisible")));
         JSONObject visibility = (JSONObject) json.get("visibility");
 
         node.setVisibility(visibility.get("status").toString());
@@ -147,8 +147,8 @@ public class JSonParser {
 
         if (json.get("children") != null) {
             String[] sitesArray = json.get("children").toString().replace("[", "").replace("]", "").split("(?<=}),");
-            for (int i = 0; i < sitesArray.length; i++) {
-                json = (JSONObject) new JSONParser().parse(sitesArray[i].replaceAll("\\s", ""));
+            for (String site : sitesArray) {
+                json = (JSONObject) new JSONParser().parse(site.replaceAll("\\s", ""));
                 Page page = new Page();
                 page.setName(json.get("name").toString());
                 page.setURL(json.get("url").toString());
@@ -163,8 +163,8 @@ public class JSonParser {
             String nodes = json.get("displayNames").toString().replace("[", "").replace("]", "");
             String[] nodesArray = nodes.split("(?<=}),");
             if (!nodesArray[0].equals("")) {
-                for (int i = 0; i < nodesArray.length; i++) {
-                    json = (JSONObject) new JSONParser().parse(nodesArray[i]);
+                for (String nodeFromArray : nodesArray) {
+                    json = (JSONObject) new JSONParser().parse(nodeFromArray);
 //                    json = new JSONObject(nodesArray[i] + "}");
                     displayNames.add(json.get("value").toString());
                 }
@@ -187,8 +187,8 @@ public class JSonParser {
             String[] nodesArray = nodes.split("(?<=}),");
             if (!nodesArray[0].equals("")) {
                 Node node;
-                for (int i = 0; i < nodesArray.length; i++) {
-                    json = (JSONObject) new JSONParser().parse(nodesArray[i]);
+                for (String nodeFromArray : nodesArray) {
+                    json = (JSONObject) new JSONParser().parse(nodeFromArray);
                     node = new Node();
                     node.setName(json.get("name").toString());
                     node.setUri(json.get("url").toString());
