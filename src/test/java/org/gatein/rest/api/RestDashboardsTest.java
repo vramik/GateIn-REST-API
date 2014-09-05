@@ -3,12 +3,9 @@ package org.gatein.rest.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.gatein.rest.constants.ConstantsService;
 import static org.gatein.rest.constants.RestConstants.REST_API_URL;
 import org.gatein.rest.entity.Site;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import org.json.simple.parser.ParseException;
 import static org.junit.Assert.assertEquals;
@@ -22,16 +19,12 @@ import org.junit.Test;
  */
 public class RestDashboardsTest {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
     }
 
     @Test
@@ -49,19 +42,19 @@ public class RestDashboardsTest {
                 dashboardsCount++;
             }
         }
-        assertEquals(dashboardsCount, 4);
+        assertEquals(4, dashboardsCount);
         String addedSite = restService.getSite("userDashboard", "dashboard");
         Site userDashboard = jSonParser.siteParser(addedSite);
-        assertTrue(userDashboard.getName().equals("userDashboard"));
-        assertTrue(userDashboard.getType().equals("dashboard"));
-        assertTrue((userDashboard.getDisplayName()).equals("null"));
-        assertTrue(userDashboard.getDescription().equals("null"));
-        assertTrue(userDashboard.getSkin().equals("Default"));
-        assertTrue(userDashboard.getLocale().equals("en"));
-        assertTrue(userDashboard.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(userDashboard.getEditPermissions().equals("[\"userDashboard\"]"));
-        assertTrue(userDashboard.getPages().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/pages\"}"));
-        assertTrue(userDashboard.getNavigation().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/navigation\"}"));
+        assertEquals("userDashboard", userDashboard.getName());
+        assertEquals("dashboard", userDashboard.getType());
+        assertEquals("null", userDashboard.getDisplayName());
+        assertEquals("null", userDashboard.getDescription());
+        assertEquals("Default", userDashboard.getSkin());
+        assertEquals("en", userDashboard.getLocale());
+        assertEquals("[\"Everyone\"]", userDashboard.getAccessPermissions());
+        assertEquals("[\"userDashboard\"]", userDashboard.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/pages\"}", userDashboard.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/navigation\"}", userDashboard.getNavigation());
         restService.deleteSite("userDashboard", "dashboard");
         restService.deleteSite("userDashboard2", "dashboard");
         restService.deleteSite("userDashboard3", "dashboard");
@@ -75,36 +68,39 @@ public class RestDashboardsTest {
         restService.addSite("userDashboard2", "dashboard");
         restService.addSite("userDashboard3", "dashboard");
         restService.addSite("userDashboard4", "dashboard");
+        
         String userDashboard3Site = restService.getSite("userDashboard3", "dashboard");
         Site userDashboard3 = jSonParser.siteParser(userDashboard3Site);
-        assertTrue(userDashboard3.getName().equals("userDashboard3"));
-        assertTrue(userDashboard3.getType().equals("dashboard"));
-        assertTrue(userDashboard3.getDisplayName().equals("null"));
-        assertTrue(userDashboard3.getDescription().equals("null"));
-        assertTrue(userDashboard3.getSkin().equals("Default"));
-        assertTrue(userDashboard3.getLocale().equals("en"));
-        assertTrue(userDashboard3.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(userDashboard3.getEditPermissions().equals("[\"userDashboard3\"]"));
-        assertTrue(userDashboard3.getPages().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard3\\/pages\"}"));
-        assertTrue(userDashboard3.getNavigation().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard3\\/navigation\"}"));
+        
+        assertEquals("userDashboard3", userDashboard3.getName());
+        assertEquals("dashboard", userDashboard3.getType());
+        assertEquals("null", userDashboard3.getDisplayName());
+        assertEquals("null", userDashboard3.getDescription());
+        assertEquals("Default", userDashboard3.getSkin());
+        assertEquals("en", userDashboard3.getLocale());
+        assertEquals("[\"Everyone\"]", userDashboard3.getAccessPermissions());
+        assertEquals("[\"userDashboard3\"]", userDashboard3.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard3\\/pages\"}", userDashboard3.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard3\\/navigation\"}", userDashboard3.getNavigation());
 
         String userDashboardSite = restService.getSite("userDashboard2", "dashboard");
-        Site userDashboard = jSonParser.siteParser(userDashboardSite);
-        assertTrue(userDashboard.getName().equals("userDashboard2"));
-        assertTrue(userDashboard.getType().equals("dashboard"));
-//        assertNull(userDashboard.getDisplayName());
-        assertTrue(userDashboard.getDescription().equals("null"));
-        assertTrue(userDashboard.getSkin().equals("Default"));
-        assertTrue(userDashboard.getLocale().equals("en"));
-        assertTrue(userDashboard.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(userDashboard.getEditPermissions().equals("[\"userDashboard2\"]"));
-        assertTrue(userDashboard.getPages().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard2\\/pages\"}"));
-        assertTrue(userDashboard.getNavigation().equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard2\\/navigation\"}"));
+        Site userDashboard2 = jSonParser.siteParser(userDashboardSite);
+        
+        assertEquals("userDashboard2", userDashboard2.getName());
+        assertEquals("dashboard", userDashboard2.getType());
+        assertEquals("null", userDashboard2.getDisplayName());
+        assertEquals("null", userDashboard2.getDescription());
+        assertEquals("Default", userDashboard2.getSkin());
+        assertEquals("en", userDashboard2.getLocale());
+        assertEquals("[\"Everyone2\"]", userDashboard2.getAccessPermissions());
+        assertEquals("[\"userDashboard2\"]", userDashboard2.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard2\\/pages\"}", userDashboard2.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard2\\/navigation\"}", userDashboard2.getNavigation());
+        
         restService.deleteSite("userDashboard", "dashboard");
         restService.deleteSite("userDashboard2", "dashboard");
         restService.deleteSite("userDashboard3", "dashboard");
         restService.deleteSite("userDashboard4", "dashboard");
-
     }
 
     @Test
@@ -121,7 +117,7 @@ public class RestDashboardsTest {
         restService.addSite("userDashboard2", "dashboard");
         restService.addSite("userDashboard3", "dashboard");
         restService.addSite("userDashboard4", "dashboard");
-        Site rootDashboard;
+
         Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "userDashboard");
         attributes.put("type", "dashboard");
@@ -131,18 +127,21 @@ public class RestDashboardsTest {
         attributes.put("access-permissions", "[\"member:/platform/users\"]");
         attributes.put("edit-permissions", "[\"*:/platform/administrators\"]");
         restService.updateSite(attributes);
+
         String site = restService.getSite("userDashboard", "dashboard");
-        rootDashboard = jSonParser.siteParser(site);
-        assertTrue((rootDashboard.getName()).equals("userDashboard"));
-        assertTrue((rootDashboard.getType()).equals("dashboard"));
-        assertTrue((rootDashboard.getDisplayName()).equals("UpdatedUserDashboard"));
-        assertTrue((rootDashboard.getDescription()).equals("Description of userDashboard Updated"));
-        assertTrue((rootDashboard.getSkin()).equals("Default"));
-        assertTrue((rootDashboard.getLocale()).equals("fr"));
-        assertTrue((rootDashboard.getAccessPermissions()).equals("[\"member:\\/platform\\/users\"]"));
-        assertTrue((rootDashboard.getEditPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((rootDashboard.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/pages\"}"));
-        assertTrue((rootDashboard.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/navigation\"}"));
+        Site rootDashboard = jSonParser.siteParser(site);
+        
+        assertEquals("userDashboard", rootDashboard.getName());
+        assertEquals("dashboard", rootDashboard.getType());
+        assertEquals("UpdatedUserDashboard", rootDashboard.getDisplayName());
+        assertEquals("Description of userDashboard Updated", rootDashboard.getDescription());
+        assertEquals("Default", rootDashboard.getSkin());
+        assertEquals("fr", rootDashboard.getLocale());
+        assertEquals("[\"member:\\/platform\\/users\"]", rootDashboard.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", rootDashboard.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/pages\"}", rootDashboard.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/dashboards\\/userDashboard\\/navigation\"}", rootDashboard.getNavigation());
+
         restService.deleteSite("userDashboard", "dashboard");
         restService.deleteSite("userDashboard2", "dashboard");
         restService.deleteSite("userDashboard3", "dashboard");

@@ -3,13 +3,10 @@ package org.gatein.rest.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Navigation;
 import org.gatein.rest.entity.Node;
 import org.gatein.rest.entity.Page;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -26,16 +23,12 @@ import org.json.simple.parser.ParseException;
  */
 public class RestNodesSpacesTest {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
     }
 
     @Test
@@ -44,20 +37,20 @@ public class RestNodesSpacesTest {
         String mylink = restService.getNode("mylink", "/platform/users", "space");
         assertNotNull(mylink);
         Node site = jSonParser.nodeParser(mylink);
-        assertTrue((site.getName()).equals("mylink"));
-        assertTrue((site.getUri()).equals("/portal/g/:platform:users/mylink"));
-        assertTrue((site.getIsVisible()).equals("true"));
-        assertTrue((site.getVisibility()).equals("VISIBLE"));
-        assertTrue((site.getIconName()).equals("null"));
-        assertTrue((site.getDisplayName()).equals("My Link"));
-        Object[] children = site.getChildren().toArray();
-        assertTrue(((Page) children[0]).getName().equals("blog"));
-        assertTrue(((Page) children[0]).getURL().equals(REST_API_URL + "/spaces/platform/users/navigation/mylink/blog"));
-        assertTrue(((Page) children[1]).getName().equals("fedora"));
-        assertTrue(((Page) children[1]).getURL().equals(REST_API_URL + "/spaces/platform/users/navigation/mylink/fedora"));
+        
+        assertEquals("mylink", site.getName());
+        assertEquals("/portal/g/:platform:users/mylink", site.getUri());
+        assertEquals("true", site.getIsVisible());
+        assertEquals("VISIBLE", site.getVisibility());
+        assertEquals("null", site.getIconName());
+        assertEquals("My Link", site.getDisplayName());
+        assertNull(site.getPage());
 
-
-        assertTrue(site.getPage() == null);
+        List<Page> children = site.getChildren();
+        assertEquals("blog", children.get(0).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users/navigation/mylink/blog", children.get(0).getURL());
+        assertEquals("fedora", children.get(1).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users/navigation/mylink/fedora", children.get(1).getURL());
     }
 
     @Test
@@ -72,12 +65,15 @@ public class RestNodesSpacesTest {
         System.out.println("**testGetNavigation**");
         String navigationString = restService.getNavigation("space", "/platform/users", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("8"));
-        assertTrue(navigation.getSiteName().equals("/platform/users"));
-        assertTrue(navigation.getSiteType().equals("space"));
-        Object[] pagesArray = navigation.getNodes().toArray();
-        assertTrue(((Node) pagesArray[0]).getName().equals("mylink"));
-        assertTrue(((Node) pagesArray[0]).getUri().equals(REST_API_URL + "/spaces/platform/users/navigation/mylink"));
+        
+        assertEquals("8", navigation.getPriority());
+        assertEquals("/platform/users", navigation.getSiteName());
+        assertEquals("space", navigation.getSiteType());
+
+        
+        List<Node> nodes = navigation.getNodes();
+        assertEquals("mylink", nodes.get(0).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users/navigation/mylink", nodes.get(0).getUri());
     }
 
     @Test
@@ -89,13 +85,14 @@ public class RestNodesSpacesTest {
         String node = restService.getNode("newNode", "/platform/users", "space");
         assertNotNull(node);
         Node newNode = jSonParser.nodeParser(node);
-        assertTrue((newNode.getName()).equals("newNode"));
-        assertTrue((newNode.getUri()).equals("/portal/g/:platform:users/newNode"));
-        assertTrue((newNode.getIsVisible()).equals("true"));
-        assertTrue((newNode.getVisibility()).equals("VISIBLE"));
-        assertTrue((newNode.getIconName()).equals("null"));
-        assertTrue((newNode.getDisplayName()).equals("newNode"));
-        assertTrue((newNode.getChildren()) == null);
+        
+        assertEquals("newNode", newNode.getName());
+        assertEquals("/portal/g/:platform:users/newNode", newNode.getUri());
+        assertEquals("true", newNode.getIsVisible());
+        assertEquals("VISIBLE", newNode.getVisibility());
+        assertEquals("null", newNode.getIconName());
+        assertEquals("newNode", newNode.getDisplayName());
+        assertNull(newNode.getChildren());
         assertNull(newNode.getPage());
 
         String jSonNavigation = restService.getNavigation("space", "/platform/users", false);
@@ -121,18 +118,22 @@ public class RestNodesSpacesTest {
         restService.createNode("newNode3", "/platform/users", "space");
         String navigationString = restService.getNavigation("space", "/platform/users", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("8"));
-        assertTrue(navigation.getSiteName().equals("/platform/users"));
-        assertTrue(navigation.getSiteType().equals("space"));
-        Object[] pagesArray = navigation.getNodes().toArray();
-        assertTrue(((Node) pagesArray[0]).getName().equals("mylink"));
-        assertTrue(((Node) pagesArray[0]).getUri().equals(REST_API_URL + "/spaces/platform/users/navigation/mylink"));
-        assertTrue(((Node) pagesArray[1]).getName().equals("newNode"));
-        assertTrue(((Node) pagesArray[1]).getUri().equals(REST_API_URL + "/spaces/platform/users/navigation/newNode"));
-        assertTrue(((Node) pagesArray[2]).getName().equals("newNode2"));
-        assertTrue(((Node) pagesArray[2]).getUri().equals(REST_API_URL + "/spaces/platform/users/navigation/newNode2"));
-        assertTrue(((Node) pagesArray[3]).getName().equals("newNode3"));
-        assertTrue(((Node) pagesArray[3]).getUri().equals(REST_API_URL + "/spaces/platform/users/navigation/newNode3"));
+        
+        assertEquals("8", navigation.getPriority());
+        assertEquals("/platform/users", navigation.getSiteName());
+        assertEquals("space", navigation.getSiteType());
+
+        
+        List<Node> nodes = navigation.getNodes();
+        assertEquals("mylink", nodes.get(0).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users/navigation/mylink", nodes.get(0).getUri());
+        assertEquals("newNode", nodes.get(1).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users/navigation/newNode", nodes.get(1).getUri());
+        assertEquals("newNode2", nodes.get(2).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users/navigation/newNode2", nodes.get(2).getUri());
+        assertEquals("newNode3", nodes.get(3).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users/navigation/newNode3", nodes.get(3).getUri());
+        
         restService.deleteNode("newNode", "/platform/users", "space");
         restService.deleteNode("newNode2", "/platform/users", "space");
         restService.deleteNode("newNode3", "/platform/users", "space");
@@ -144,8 +145,6 @@ public class RestNodesSpacesTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "administration");
         attributes.put("type", "space");
-
-        //     attributes.put("visibility", "{\"status\" : \"INVISIBLE\"}");
         attributes.put("iconName", "Ticket");
         attributes.put("displayName", "Admin Updated Node");
 
@@ -153,23 +152,23 @@ public class RestNodesSpacesTest {
         String node = restService.getNode("administration", "/platform/administrators", "space");
         Node homeNode = jSonParser.nodeParser(node);
 
-        assertTrue((homeNode.getName()).equals("administration"));
-        assertTrue((homeNode.getUri()).equals("/portal/g/:platform:administrators/administration"));
-        assertTrue((homeNode.getIsVisible()).equals("true"));
-        assertTrue((homeNode.getVisibility()).equals("VISIBLE"));
-        assertTrue((homeNode.getIconName()).equals("Ticket"));
-        assertTrue((homeNode.getDisplayName()).equals("Admin Updated Node"));
-        Object[] children = homeNode.getChildren().toArray();
-        assertTrue(((Page) children[0]).getName().equals("registry"));
-        assertTrue(((Page) children[0]).getURL().equals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/registry"));
-        assertTrue(((Page) children[1]).getName().equals("pageManagement"));
-        assertTrue(((Page) children[1]).getURL().equals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/pageManagement"));
-        assertTrue(((Page) children[2]).getName().equals("servicesManagement"));
-        assertTrue(((Page) children[2]).getURL().equals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/servicesManagement"));
-        assertTrue(((Page) children[3]).getName().equals("siteRedirects"));
-        assertTrue(((Page) children[3]).getURL().equals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/siteRedirects"));
-        assertTrue(homeNode.getPage() == null);
+        assertEquals("administration", homeNode.getName());
+        assertEquals("/portal/g/:platform:administrators/administration", homeNode.getUri());
+        assertEquals("true", homeNode.getIsVisible());
+        assertEquals("VISIBLE", homeNode.getVisibility());
+        assertEquals("Ticket", homeNode.getIconName());
+        assertEquals("Admin Updated Node", homeNode.getDisplayName());
 
+        List<Page> children = homeNode.getChildren();
+        assertEquals("registry", children.get(0).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/registry", children.get(0).getURL());
+        assertEquals("pageManagement", children.get(1).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/pageManagement", children.get(1).getURL());
+        assertEquals("servicesManagement", children.get(2).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/servicesManagement", children.get(2).getURL());
+        assertEquals("siteRedirects", children.get(3).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/administrators/navigation/administration/siteRedirects", children.get(3).getURL());
+        assertNull(homeNode.getPage());
     }
 
     @Test
@@ -186,10 +185,13 @@ public class RestNodesSpacesTest {
         
         Navigation navigation = jSonParser.navigationParser(navigationString);
         
+        assertEquals("8", navigation.getPriority());
+        assertEquals("/platform/users", navigation.getSiteName());
+        assertEquals("space", navigation.getSiteType());
         assertTrue(navigation.getPriority().equals("8"));
         assertTrue(navigation.getSiteName().equals("/platform/users"));
         assertTrue(navigation.getSiteType().equals("space"));
 
-        assertEquals(navigation.getNodes().size(), 1);
+        assertEquals(1, navigation.getNodes().size());
     }
 }

@@ -1,15 +1,11 @@
 package org.gatein.rest.api;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.helper.JSonParser;
 import org.gatein.rest.entity.Page;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
-import org.gatein.rest.service.api.HelpingServiceApi;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -19,20 +15,16 @@ import org.json.simple.parser.ParseException;
 
 /**
  *
- * @author mgottval
+ * @author vramik
  */
 public class RestSitesPagesTest {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
     }
 
     @Test
@@ -40,35 +32,25 @@ public class RestSitesPagesTest {
         System.out.println("**testGetSitesPages**");
         String classicPages = restService.getSitePages("classic", "site");
         List<Page> pages = jSonParser.pagesParser(classicPages);
-        Object[] pagesArray = pages.toArray();
-        List<Object> pagesList = Arrays.asList(pagesArray);
-        for (Object object : pagesList) {
-
-            switch (((Page) object).getName()) {
+        for (Page page : pages) {
+            assertEquals("classic", page.getSiteName());
+            assertEquals("site", page.getSiteType());
+            
+            switch (page.getName()) {
                 case "homepage":
-                    assertTrue(((Page) object).getSiteName().equals("classic"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/classic/pages/homepage"));
+                    assertEquals(REST_API_URL + "/sites/classic/pages/homepage", page.getURL());
                     break;
                 case "groupnavigation":
-                    assertTrue(((Page) object).getSiteName().equals("classic"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/classic/pages/groupnavigation"));
+                    assertEquals(REST_API_URL + "/sites/classic/pages/groupnavigation", page.getURL());
                     break;
                 case "portalnavigation":
-                    assertTrue(((Page) object).getSiteName().equals("classic"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/classic/pages/portalnavigation"));
+                    assertEquals(REST_API_URL + "/sites/classic/pages/portalnavigation", page.getURL());
                     break;
                 case "register":
-                    assertTrue(((Page) object).getSiteName().equals("classic"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/classic/pages/register"));
+                    assertEquals(REST_API_URL + "/sites/classic/pages/register", page.getURL());
                     break;
                 case "sitemap":
-                    assertTrue(((Page) object).getSiteName().equals("classic"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/classic/pages/sitemap"));
+                    assertEquals(REST_API_URL + "/sites/classic/pages/sitemap", page.getURL());
                     break;
             }
         }
@@ -76,35 +58,25 @@ public class RestSitesPagesTest {
         String mobilePages = restService.getSitePages("mobile", "site");
         pages.clear();
         pages = jSonParser.pagesParser(mobilePages);
-        Object[] mobilePagesArray = pages.toArray();
-        List<Object> mobilePagesList = Arrays.asList(mobilePagesArray);
-        for (Object object : mobilePagesList) {
-
-            switch (((Page) object).getName()) {
+        for (Page page : pages) {
+            assertEquals("mobile", page.getSiteName());
+            assertEquals("site", page.getSiteType());
+            
+            switch (page.getName()) {
                 case "homepage":
-                    assertTrue(((Page) object).getSiteName().equals("mobile"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/mobile/pages/homepage"));
+                    assertEquals(REST_API_URL + "/sites/mobile/pages/homepage", page.getURL());
                     break;
                 case "groupnavigation":
-                    assertTrue(((Page) object).getSiteName().equals("mobile"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/mobile/pages/groupnavigation"));
+                    assertEquals(REST_API_URL + "/sites/mobile/pages/groupnavigation", page.getURL());
                     break;
                 case "portalnavigation":
-                    assertTrue(((Page) object).getSiteName().equals("mobile"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/mobile/pages/portalnavigation"));
+                    assertEquals(REST_API_URL + "/sites/mobile/pages/portalnavigation", page.getURL());
                     break;
                 case "register":
-                    assertTrue(((Page) object).getSiteName().equals("mobile"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/mobile/pages/register"));
+                    assertEquals(REST_API_URL + "/sites/mobile/pages/register", page.getURL());
                     break;
-                case "features":
-                    assertTrue(((Page) object).getSiteName().equals("mobile"));
-                    assertTrue(((Page) object).getSiteType().equals("site"));
-                    assertTrue(((Page) object).getURL().equals(REST_API_URL + "/sites/mobile/pages/features"));
+                case "sitemap":
+                    assertEquals(REST_API_URL + "/sites/mobile/pages/sitemap", page.getURL());
                     break;
             }
         }
@@ -115,11 +87,11 @@ public class RestSitesPagesTest {
         System.out.println("**testGetPage**");
         String page = restService.getPage("homepage", "classic", "site");
         Page homepage = jSonParser.pageParser(page);
-        assertTrue(homepage.getName().equals("homepage"));
-        assertTrue(homepage.getDisplayName().equals("Home Page"));
-        assertTrue(homepage.getDescription().equals("null"));
-        assertTrue(homepage.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(homepage.getEditPermissions().equals("[\"*:\\/platform\\/administrators\"]"));
+        assertEquals("homepage", homepage.getName());
+        assertEquals("Home Page", homepage.getDisplayName());
+        assertEquals("null", homepage.getDescription());
+        assertEquals("[\"Everyone\"]", homepage.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", homepage.getEditPermissions());
     }
 
     @Test
@@ -136,15 +108,15 @@ public class RestSitesPagesTest {
                 addedPages = addedPages + 1;
             }
         }
-        assertEquals(addedPages, 3);
+        assertEquals(3, addedPages);
 
         String page = restService.getPage("newPage", "classic", "site");
         Page homepage = jSonParser.pageParser(page);
-        assertTrue(homepage.getName().equals("newPage"));
-        assertTrue(homepage.getDisplayName().equals("newPage"));
-        assertTrue(homepage.getDescription().equals("null"));
-        assertTrue(homepage.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(homepage.getEditPermissions().equals("[\"*:\\/platform\\/administrators\"]"));
+        assertEquals("newPage", homepage.getName());
+        assertEquals("newPage", homepage.getDisplayName());
+        assertEquals("null", homepage.getDescription());
+        assertEquals("[\"Everyone\"]", homepage.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", homepage.getEditPermissions());
 
         restService.deletePage("classic", "newPage", "site");
         restService.deletePage("classic", "newPage2", "site");
@@ -169,11 +141,11 @@ public class RestSitesPagesTest {
 
         String page = restService.getPage("newPage", "mobile", "site");
         Page homepage = jSonParser.pageParser(page);
-        assertTrue(homepage.getName().equals("newPage"));
-        assertTrue(homepage.getDisplayName().equals("newPage"));
-        assertTrue(homepage.getDescription().equals("null"));
-        assertTrue(homepage.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(homepage.getEditPermissions().equals("[\"*:\\/platform\\/administrators\"]"));
+        assertEquals("newPage", homepage.getName());
+        assertEquals("newPage", homepage.getDisplayName());
+        assertEquals("null", homepage.getDescription());
+        assertEquals("[\"Everyone\"]", homepage.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", homepage.getEditPermissions());
         restService.deletePage("mobile", "newPage", "site");
         restService.deletePage("mobile", "newPage2", "site");
         restService.deletePage("mobile", "newPage3", "site");
@@ -184,10 +156,6 @@ public class RestSitesPagesTest {
         System.out.println("**testGetNonExistingPage**");
         String getResult = restService.getPage("nonPage", "classic", "site");
         assertTrue(getResult.contains("does not exist"));
-
-        restService.deletePage("mobile", "newPage", "site");
-        restService.deletePage("mobile", "newPage2", "site");
-        restService.deletePage("mobile", "newPage3", "site");
     }
 
     @Test
@@ -211,11 +179,11 @@ public class RestSitesPagesTest {
         restService.updatePage(attributeMap, "site");
         String page = restService.getPage("newPage", "classic", "site");
         Page newPage = jSonParser.pageParser(page);
-        assertTrue(newPage.getName().equals("newPage"));
-        assertTrue(newPage.getDisplayName().equals("UpdatedNewPage"));
-        assertTrue(newPage.getDescription().equals("Updated description"));
-        assertTrue(newPage.getAccessPermissions().equals("[\"manager:\\/platform\\/guests\"]"));
-        assertTrue(newPage.getEditPermissions().equals("[\"*:\\/platform\\/administrators\"]"));
+        assertEquals("newPage", newPage.getName());
+        assertEquals("UpdatedNewPage", newPage.getDisplayName());
+        assertEquals("Updated description", newPage.getDescription());
+        assertEquals("[\"manager:\\/platform\\/guests\"]", newPage.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", newPage.getEditPermissions());
 
         attributeMap.clear();
         attributeMap.put("name", "homepage");
@@ -227,11 +195,11 @@ public class RestSitesPagesTest {
         restService.updatePage(attributeMap, "site");
         String home = restService.getPage("homepage", "classic", "site");
         Page homepage = jSonParser.pageParser(home);
-        assertTrue(homepage.getName().equals("homepage"));
-        assertTrue(homepage.getDisplayName().equals("UpdatedHomepage"));
-        assertTrue(homepage.getDescription().equals("Homepage updated description"));
-        assertTrue(homepage.getAccessPermissions().equals("[\"*:\\/platform\\/users\"]"));
-        assertTrue(homepage.getEditPermissions().equals("[\"member:\\/platform\\/guests\"]"));
+        assertEquals("homepage", homepage.getName());
+        assertEquals("UpdatedHomepage", homepage.getDisplayName());
+        assertEquals("Homepage updated description", homepage.getDescription());
+        assertEquals("[\"*:\\/platform\\/users\"]", homepage.getAccessPermissions());
+        assertEquals("[\"member:\\/platform\\/guests\"]", homepage.getEditPermissions());
 
         attributeMap.clear();
         attributeMap.put("name", "homepage");
@@ -243,11 +211,11 @@ public class RestSitesPagesTest {
         restService.updatePage(attributeMap, "site");
         String homeRestore = restService.getPage("homepage", "classic", "site");
         Page homepageRestore = jSonParser.pageParser(homeRestore);
-        assertTrue(homepageRestore.getName().equals("homepage"));
-        assertTrue(homepageRestore.getDisplayName().equals("Home Page"));
-        assertTrue(homepageRestore.getDescription().equals("null"));
-        assertTrue(homepageRestore.getAccessPermissions().equals("[\"Everyone\"]"));
-        assertTrue(homepageRestore.getEditPermissions().equals("[\"*:\\/platform\\/administrators\"]"));
+        assertEquals("homepage", homepageRestore.getName());
+        assertEquals("Home Page", homepageRestore.getDisplayName());
+        assertEquals("null", homepageRestore.getDescription());
+        assertEquals("[\"Everyone\"]", homepageRestore.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", homepageRestore.getEditPermissions());
         restService.deletePage("classic", "newPage", "site");
         restService.deletePage("classic", "newPage2", "site");
         restService.deletePage("classic", "newPage3", "site");
@@ -284,7 +252,7 @@ public class RestSitesPagesTest {
                 addedPages = addedPages + 1;
             }
         }
-        assertEquals(addedPages, 0);
+        assertEquals(0, addedPages);
 
         String mobilePages = restService.getSitePages("mobile", "site");
         List<Page> mpages = jSonParser.pagesParser(mobilePages);
@@ -294,7 +262,6 @@ public class RestSitesPagesTest {
                 addedPages = addedPages + 1;
             }
         }
-        assertEquals(addedPages, 0);
-
+        assertEquals(0, addedPages);
     }
 }

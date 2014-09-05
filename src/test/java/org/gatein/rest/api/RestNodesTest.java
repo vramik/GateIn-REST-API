@@ -3,13 +3,10 @@ package org.gatein.rest.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Navigation;
 import org.gatein.rest.entity.Node;
 import org.gatein.rest.entity.Page;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -26,17 +23,12 @@ import org.json.simple.parser.ParseException;
  */
 public class RestNodesTest {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
-
+        restService = new RestService();
     }
 
     @Test
@@ -46,33 +38,32 @@ public class RestNodesTest {
         String siteMap = restService.getNode("sitemap", "classic", "site");
         assertNotNull(siteMap);
         Node site = jSonParser.nodeParser(siteMap);
-        assertTrue((site.getName()).equals("sitemap"));
-        assertTrue((site.getUri()).equals("/portal/classic/sitemap"));
-        assertTrue((site.getIsVisible()).equals("true"));
-        assertTrue((site.getVisibility()).equals("VISIBLE"));
-        assertTrue((site.getIconName()).equals("null"));
-        assertTrue((site.getDisplayName()).equals("SiteMap"));
-        assertTrue((site.getChildren()) == null);
-        assertTrue((site.getPage().getName()).equals("sitemap"));
-        assertTrue((site.getPage().getSiteName()).equals("classic"));
-        assertTrue((site.getPage().getSiteType()).equals("site"));
-        assertTrue((site.getPage().getURL()).equals(REST_API_URL + "/sites/classic/pages/sitemap"));
+        assertEquals("sitemap", site.getName());
+        assertEquals("/portal/classic/sitemap", site.getUri());
+        assertEquals("true", site.getIsVisible());
+        assertEquals("VISIBLE", site.getVisibility());
+        assertEquals("null", site.getIconName());
+        assertEquals("SiteMap", site.getDisplayName());
+        assertNull(site.getChildren());
+        assertEquals("sitemap", site.getPage().getName());
+        assertEquals("classic", site.getPage().getSiteName());
+        assertEquals("site", site.getPage().getSiteType());
+        assertEquals(REST_API_URL + "/sites/classic/pages/sitemap", site.getPage().getURL());
 
         String homeNode = restService.getNode("home", "classic", "site");
         assertNotNull(homeNode);
         Node home = jSonParser.nodeParser(homeNode);
-        assertTrue((home.getName()).equals("home"));
-        assertTrue((home.getUri()).equals("/portal/classic/home"));
-        assertTrue((home.getIsVisible()).equals("true"));
-        assertTrue((home.getVisibility()).equals("VISIBLE"));
-        assertTrue((home.getIconName()).equals("null"));
-        assertTrue((home.getDisplayName()).equals("Home"));
-        assertTrue((home.getChildren()) == (null));
-        assertTrue((home.getPage().getName()).equals("homepage"));
-        assertTrue((home.getPage().getSiteName()).equals("classic"));
-        assertTrue((home.getPage().getSiteType()).equals("site"));
-        assertTrue((home.getPage().getURL()).equals(REST_API_URL + "/sites/classic/pages/homepage"));
-
+        assertEquals("home", home.getName());
+        assertEquals("/portal/classic/home", home.getUri());
+        assertEquals("true", home.getIsVisible());
+        assertEquals("VISIBLE", home.getVisibility());
+        assertEquals("null", home.getIconName());
+        assertEquals("Home", home.getDisplayName());
+        assertNull(home.getChildren());
+        assertEquals("homepage", home.getPage().getName());
+        assertEquals("classic", home.getPage().getSiteName());
+        assertEquals("site", home.getPage().getSiteType());
+        assertEquals(REST_API_URL + "/sites/classic/pages/homepage", home.getPage().getURL());
     }
 
     @Test
@@ -82,17 +73,18 @@ public class RestNodesTest {
         String siteMap = restService.getNode("home", "newSite", "site");
         assertNotNull(siteMap);
         Node site = jSonParser.nodeParser(siteMap);
-        assertTrue((site.getName()).equals("home"));
-        assertTrue((site.getUri()).equals("/portal/newSite/home"));
-        assertTrue((site.getIsVisible()).equals("true"));
-        assertTrue((site.getVisibility()).equals("VISIBLE"));
-        assertTrue((site.getIconName()).equals("null"));
-        assertTrue((site.getDisplayName()).equals("Home"));
-        assertTrue((site.getChildren()) == (null));
-        assertTrue((site.getPage().getName()).equals("homepage"));
-        assertTrue((site.getPage().getSiteName()).equals("newSite"));
-        assertTrue((site.getPage().getSiteType()).equals("site"));
-        assertTrue((site.getPage().getURL()).equals(REST_API_URL + "/sites/newSite/pages/homepage"));
+        assertEquals("home", site.getName());
+        assertEquals("/portal/newSite/home", site.getUri());
+        assertEquals("true", site.getIsVisible());
+        assertEquals("VISIBLE", site.getVisibility());
+        assertEquals("null", site.getIconName());
+        assertEquals("Home", site.getDisplayName());
+        assertNull(site.getChildren());
+        assertEquals("homepage", site.getPage().getName());
+        assertEquals("newSite", site.getPage().getSiteName());
+        assertEquals("site", site.getPage().getSiteType());
+        assertEquals(REST_API_URL + "/sites/newSite/pages/homepage", site.getPage().getURL());
+        
         restService.deleteSite("newSite", "site");
     }
 
@@ -108,15 +100,15 @@ public class RestNodesTest {
         System.out.println("**testGetNavigation**");
         String navigationString = restService.getNavigation("site", "classic", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("1"));
-        assertTrue(navigation.getSiteName().equals("classic"));
-        assertTrue(navigation.getSiteType().equals("site"));
-        Object[] pagesArray = navigation.getNodes().toArray();
-        assertTrue(((Node) pagesArray[0]).getName().equals("home"));
-        assertTrue(((Node) pagesArray[0]).getUri().equals(REST_API_URL + "/sites/classic/navigation/home"));
-        assertTrue(((Node) pagesArray[1]).getName().equals("sitemap"));
-        assertTrue(((Node) pagesArray[1]).getUri().equals(REST_API_URL + "/sites/classic/navigation/sitemap"));
+        assertEquals("1", navigation.getPriority());
+        assertEquals("classic", navigation.getSiteName());
+        assertEquals("site", navigation.getSiteType());
 
+        List<Node> nodes = navigation.getNodes();
+        assertEquals("home", nodes.get(0).getName());
+        assertEquals(REST_API_URL + "/sites/classic/navigation/home", nodes.get(0).getUri());
+        assertEquals("sitemap", nodes.get(1).getName());
+        assertEquals(REST_API_URL + "/sites/classic/navigation/sitemap", nodes.get(1).getUri());
     }
 
     @Test
@@ -125,12 +117,13 @@ public class RestNodesTest {
         restService.addSite("newSite", "site");
         String navigationString = restService.getNavigation("site", "newSite", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("1"));
-        assertTrue(navigation.getSiteName().equals("newSite"));
-        assertTrue(navigation.getSiteType().equals("site"));
-        Object[] pagesArray = navigation.getNodes().toArray();
-        assertTrue(((Node) pagesArray[0]).getName().equals("home"));
-        assertTrue(((Node) pagesArray[0]).getUri().equals(REST_API_URL + "/sites/newSite/navigation/home"));
+        assertEquals("1", navigation.getPriority());
+        assertEquals("newSite", navigation.getSiteName());
+        assertEquals("site", navigation.getSiteType());
+        
+        List<Node> nodes = navigation.getNodes();
+        assertEquals("home", nodes.get(0).getName());
+        assertEquals(REST_API_URL + "/sites/newSite/navigation/home", nodes.get(0).getUri());
         restService.deleteSite("newSite", "site");
     }
 
@@ -140,19 +133,17 @@ public class RestNodesTest {
         restService.createNode("newNode", "classic", "site");
         restService.createNode("newNode2", "classic", "site");
         restService.createNode("newNode3", "classic", "site");
-        String navigationString = restService.getNavigation("site", "classic", false);
-        Navigation navigation = jSonParser.navigationParser(navigationString);
 
         String node = restService.getNode("newNode", "classic", "site");
         assertNotNull(node);
         Node newNode = jSonParser.nodeParser(node);
-        assertTrue((newNode.getName()).equals("newNode"));
-        assertTrue((newNode.getUri()).equals("/portal/classic/newNode"));
-        assertTrue((newNode.getIsVisible()).equals("true"));
-        assertTrue((newNode.getVisibility()).equals("VISIBLE"));
-        assertTrue((newNode.getIconName()).equals("null"));
-        assertTrue((newNode.getDisplayName()).equals("newNode"));
-        assertTrue((newNode.getChildren()) == (null));
+        assertEquals("newNode", newNode.getName());
+        assertEquals("/portal/classic/newNode", newNode.getUri());
+        assertEquals("true", newNode.getIsVisible());
+        assertEquals("VISIBLE", newNode.getVisibility());
+        assertEquals("null", newNode.getIconName());
+        assertEquals("newNode", newNode.getDisplayName());
+        assertNull(newNode.getChildren());
         assertNull(newNode.getPage());
 
         String jSonNavigation = restService.getNavigation("site", "classic", false);
@@ -168,7 +159,6 @@ public class RestNodesTest {
         restService.deleteNode("newNode", "classic", "site");
         restService.deleteNode("newNode2", "classic", "site");
         restService.deleteNode("newNode3", "classic", "site");
-
     }
 
     @Test
@@ -179,24 +169,26 @@ public class RestNodesTest {
         restService.createNode("newNode3", "classic", "site");
         String navigationString = restService.getNavigation("site", "classic", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("1"));
-        assertTrue(navigation.getSiteName().equals("classic"));
-        assertTrue(navigation.getSiteType().equals("site"));
-        Object[] pagesArray = navigation.getNodes().toArray();
-        assertTrue(((Node) pagesArray[0]).getName().equals("home"));
-        assertTrue(((Node) pagesArray[0]).getUri().equals(REST_API_URL + "/sites/classic/navigation/home"));
-        assertTrue(((Node) pagesArray[1]).getName().equals("sitemap"));
-        assertTrue(((Node) pagesArray[1]).getUri().equals(REST_API_URL + "/sites/classic/navigation/sitemap"));
-        assertTrue(((Node) pagesArray[2]).getName().equals("newNode"));
-        assertTrue(((Node) pagesArray[2]).getUri().equals(REST_API_URL + "/sites/classic/navigation/newNode"));
-        assertTrue(((Node) pagesArray[3]).getName().equals("newNode2"));
-        assertTrue(((Node) pagesArray[3]).getUri().equals(REST_API_URL + "/sites/classic/navigation/newNode2"));
-        assertTrue(((Node) pagesArray[4]).getName().equals("newNode3"));
-        assertTrue(((Node) pagesArray[4]).getUri().equals(REST_API_URL + "/sites/classic/navigation/newNode3"));
+        
+        assertEquals("1", navigation.getPriority());
+        assertEquals("classic", navigation.getSiteName());
+        assertEquals("site", navigation.getSiteType());
+        
+        List<Node> nodes = navigation.getNodes();
+        assertEquals("home", nodes.get(0).getName());
+        assertEquals(REST_API_URL + "/sites/classic/navigation/home", nodes.get(0).getUri());
+        assertEquals("sitemap", nodes.get(1).getName());
+        assertEquals(REST_API_URL + "/sites/classic/navigation/sitemap", nodes.get(1).getUri());
+        assertEquals("newNode", nodes.get(2).getName());
+        assertEquals(REST_API_URL + "/sites/classic/navigation/newNode", nodes.get(2).getUri());
+        assertEquals("newNode2", nodes.get(3).getName());
+        assertEquals(REST_API_URL + "/sites/classic/navigation/newNode2", nodes.get(3).getUri());
+        assertEquals("newNode3", nodes.get(4).getName());
+        assertEquals(REST_API_URL + "/sites/classic/navigation/newNode3", nodes.get(4).getUri());
+
         restService.deleteNode("newNode", "classic", "site");
         restService.deleteNode("newNode2", "classic", "site");
         restService.deleteNode("newNode3", "classic", "site");
-
     }
 
     @Test
@@ -218,10 +210,10 @@ public class RestNodesTest {
         String nodeUpdated = restService.getNode("newNode", "classic", "site");
         Node newNodeUpdated = jSonParser.nodeParser(nodeUpdated);
         Page page = newNodeUpdated.getPage();
-        assertTrue(page.getName().equals("sitemap"));
-        assertTrue(page.getSiteName().equals("classic"));
-        assertTrue(page.getSiteType().equals("site"));
-        assertTrue(page.getURL().equals(REST_API_URL + "/sites/classic/pages/sitemap"));
+        assertEquals("sitemap", page.getName());
+        assertEquals("classic", page.getSiteName());
+        assertEquals("site", page.getSiteType());
+        assertEquals(REST_API_URL + "/sites/classic/pages/sitemap", page.getURL());
 
         restService.updateNodesPage("{\"page\" : null}", "classic", "site", "newNode");
         String nodeNull = restService.getNode("newNode", "classic", "site");
@@ -247,17 +239,17 @@ public class RestNodesTest {
         restService.updateNode(attributes, "classic", "site");
         String node = restService.getNode("home", "classic", "site");
         Node homeNode = jSonParser.nodeParser(node);
-        assertTrue((homeNode.getName()).equals("home"));
-        assertTrue((homeNode.getUri()).equals("/portal/classic/home"));
-        assertTrue((homeNode.getIsVisible()).equals("false"));
-        assertTrue((homeNode.getVisibility()).equals("HIDDEN"));
-        assertTrue((homeNode.getIconName()).equals("StarPage"));
-        assertTrue((homeNode.getDisplayName()).equals("home Updated Node"));
-        assertTrue((homeNode.getChildren()) == (null));
-        assertTrue((homeNode.getPage().getName()).equals("homepage"));
-        assertTrue((homeNode.getPage().getSiteName()).equals("classic"));
-        assertTrue((homeNode.getPage().getSiteType()).equals("site"));
-        assertTrue((homeNode.getPage().getURL()).equals(REST_API_URL + "/sites/classic/pages/homepage"));
+        assertEquals("home", homeNode.getName());
+        assertEquals("/portal/classic/home", homeNode.getUri());
+        assertEquals("false", homeNode.getIsVisible());
+        assertEquals("HIDDEN", homeNode.getVisibility());
+        assertEquals("StarPage", homeNode.getIconName());
+        assertEquals("home Updated Node", homeNode.getDisplayName());
+        assertNull(homeNode.getChildren());
+        assertEquals("homepage", homeNode.getPage().getName());
+        assertEquals("classic", homeNode.getPage().getSiteName());
+        assertEquals("site", homeNode.getPage().getSiteType());
+        assertEquals(REST_API_URL + "/sites/classic/pages/homepage", homeNode.getPage().getURL());
 
         attributes.clear();
         attributes.put("name", "home");
@@ -270,17 +262,17 @@ public class RestNodesTest {
         restService.updateNode(attributes, "classic", "site");
         String restoredNode = restService.getNode("home", "classic", "site");
         Node restoredHomeNode = jSonParser.nodeParser(restoredNode);
-        assertTrue((restoredHomeNode.getName()).equals("home"));
-        assertTrue((restoredHomeNode.getUri()).equals("/portal/classic/home"));
-        assertTrue((restoredHomeNode.getIsVisible()).equals("true"));
-        assertTrue((restoredHomeNode.getVisibility()).equals("VISIBLE"));
-        assertTrue((restoredHomeNode.getIconName()).equals("null"));
-        assertTrue((restoredHomeNode.getDisplayName()).equals("Home"));
-        assertTrue((restoredHomeNode.getChildren()) == (null));
-        assertTrue((restoredHomeNode.getPage().getName()).equals("homepage"));
-        assertTrue((restoredHomeNode.getPage().getSiteName()).equals("classic"));
-        assertTrue((restoredHomeNode.getPage().getSiteType()).equals("site"));
-        assertTrue((restoredHomeNode.getPage().getURL()).equals(REST_API_URL + "/sites/classic/pages/homepage"));
+        assertEquals("home", restoredHomeNode.getName());
+        assertEquals("/portal/classic/home", restoredHomeNode.getUri());
+        assertEquals("true", restoredHomeNode.getIsVisible());
+        assertEquals("VISIBLE", restoredHomeNode.getVisibility());
+        assertEquals("null", restoredHomeNode.getIconName());
+        assertEquals("Home", restoredHomeNode.getDisplayName());
+        assertNull(restoredHomeNode.getChildren());
+        assertEquals("homepage", restoredHomeNode.getPage().getName());
+        assertEquals("classic", restoredHomeNode.getPage().getSiteName());
+        assertEquals("site", restoredHomeNode.getPage().getSiteType());
+        assertEquals(REST_API_URL + "/sites/classic/pages/homepage", restoredHomeNode.getPage().getURL());
     }
 
     @Test
@@ -295,12 +287,10 @@ public class RestNodesTest {
 
         String navigationString = restService.getNavigation("site", "classic", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("1"));
-        assertTrue(navigation.getSiteName().equals("classic"));
-        assertTrue(navigation.getSiteType().equals("site"));
-        Object[] pagesArray = navigation.getNodes().toArray();
-
-        assertEquals(pagesArray.length, 2);
+        assertEquals("1", navigation.getPriority());
+        assertEquals("classic", navigation.getSiteName());
+        assertEquals("site", navigation.getSiteType());
+        assertEquals(2, navigation.getNodes().size());
         restService.addSite("newSite", "site");
         restService.deleteSite("newSite", "site");
     }

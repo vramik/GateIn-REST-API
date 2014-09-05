@@ -1,22 +1,13 @@
 package org.gatein.rest.update;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.http.HttpEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Navigation;
 import org.gatein.rest.entity.Node;
 import org.gatein.rest.entity.Page;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import org.json.simple.parser.ParseException;
-import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -29,16 +20,12 @@ import org.junit.Test;
  */
 public class RestUpdateMoreGroups {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
 
     }
 

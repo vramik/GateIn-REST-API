@@ -12,16 +12,8 @@ import org.gatein.rest.service.api.RestServiceApi;
  */
 public class RestService implements RestServiceApi {
 
-    private HelpingServiceApi helpingService;
-    private ConstantsService constantsService;
-
-    public RestService() {
-    }
-
-    public RestService(HelpingServiceApi helpingService, ConstantsService constantsService) {
-        this.helpingService = helpingService;
-        this.constantsService = constantsService;
-    }
+    private final HelpingServiceApi helpingService = new HelpingService();
+    private final ConstantsService constantsService = new ConstantsService();
 
     @Override
     public void addSite(String siteName, String siteType) {

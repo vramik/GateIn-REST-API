@@ -2,14 +2,11 @@ package org.gatein.rest.update;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Navigation;
 import org.gatein.rest.entity.Node;
 import org.gatein.rest.entity.Page;
 import org.gatein.rest.entity.Site;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import org.json.simple.parser.ParseException;
 import static org.junit.Assert.assertEquals;
@@ -23,16 +20,12 @@ import org.junit.Test;
  */
 public class RestUpdateDashboards {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
     }
   
     @Test

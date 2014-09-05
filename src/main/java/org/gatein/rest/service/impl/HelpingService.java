@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
 import org.gatein.rest.service.api.HelpingServiceApi;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -74,10 +75,19 @@ public class HelpingService implements HelpingServiceApi {
 
     private String executeHttpRequest(HttpRequestBase httpRequest) {
         String stringEntity = null;
+        System.out.println("----------------------------------------");
         System.out.println("Executing request " + httpRequest.getRequestLine());
         try (CloseableHttpResponse response = httpClientAuthenticationRootAny().execute(httpRequest)) {
             System.out.println("----------------------------------------");
-            System.out.println(response.getStatusLine());
+            StatusLine statusLine = response.getStatusLine();
+            System.out.println(statusLine);
+            if (statusLine.getStatusCode() == 500) {
+                try {
+                    Thread.sleep(120000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(HelpingService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             HttpEntity httpEntity = response.getEntity();
             stringEntity = EntityUtils.toString(httpEntity);
             EntityUtils.consume(httpEntity);

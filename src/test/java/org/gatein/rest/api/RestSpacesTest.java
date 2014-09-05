@@ -3,20 +3,13 @@ package org.gatein.rest.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.gatein.rest.constants.ConstantsService;
-import org.gatein.rest.constants.RestConstants;
 import static org.gatein.rest.constants.RestConstants.REST_API_URL;
 import org.gatein.rest.entity.Site;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import org.json.simple.parser.ParseException;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,16 +20,12 @@ import org.junit.Test;
  */
 public class RestSpacesTest {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
     }
 
     @Test
@@ -44,20 +33,20 @@ public class RestSpacesTest {
         System.out.println("**testGetSpaces**");
         String spaces = restService.getAllSites("space");
         List<Site> spaceSites = jSonParser.sitesParser(spaces);
-        Object[] pagesArray = spaceSites.toArray();
-        assertEquals(pagesArray.length, 4);
-        assertTrue(((Site) pagesArray[0]).getName().equals("/platform/guests"));
-        assertTrue(((Site) pagesArray[0]).getType().equals("space"));
-        assertTrue(((Site) pagesArray[0]).getNavigation().equals("" + REST_API_URL + "/spaces/platform/guests"));
-        assertTrue(((Site) pagesArray[1]).getName().equals("/organization/management/executive-board"));
-        assertTrue(((Site) pagesArray[1]).getType().equals("space"));
-        assertTrue(((Site) pagesArray[1]).getNavigation().equals("" + REST_API_URL + "/spaces/organization/management/executive-board"));
-        assertTrue(((Site) pagesArray[2]).getName().equals("/platform/administrators"));
-        assertTrue(((Site) pagesArray[2]).getType().equals("space"));
-        assertTrue(((Site) pagesArray[2]).getNavigation().equals("" + REST_API_URL + "/spaces/platform/administrators"));
-        assertTrue(((Site) pagesArray[3]).getName().equals("/platform/users"));
-        assertTrue(((Site) pagesArray[3]).getType().equals("space"));
-        assertTrue(((Site) pagesArray[3]).getNavigation().equals("" + REST_API_URL + "/spaces/platform/users"));
+
+        assertEquals(4, spaceSites.size());
+        assertEquals("/platform/guests", spaceSites.get(0).getName());
+        assertEquals("space", spaceSites.get(0).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/guests", spaceSites.get(0).getNavigation());
+        assertEquals("/organization/management/executive-board", spaceSites.get(1).getName());
+        assertEquals("space", spaceSites.get(1).getName());
+        assertEquals(REST_API_URL + "/spaces/organization/management/executive-board", spaceSites.get(1).getNavigation());
+        assertEquals("/platform/administrators", spaceSites.get(2).getName());
+        assertEquals("space", spaceSites.get(2).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/administrators", spaceSites.get(2).getNavigation());
+        assertEquals("/platform/users", spaceSites.get(3).getName());
+        assertEquals("space", spaceSites.get(3).getName());
+        assertEquals(REST_API_URL + "/spaces/platform/users", spaceSites.get(3).getNavigation());
     }
 
     @Test
@@ -66,16 +55,17 @@ public class RestSpacesTest {
         String site = restService.getSite("/platform/guests", "space");
         assertNotNull(site);
         Site guests = jSonParser.siteParser(site);
-        assertTrue((guests.getName()).equals("/platform/guests"));
-        assertTrue((guests.getType()).equals("space"));
-        assertTrue((guests.getDisplayName()).equals("null"));
-        assertTrue((guests.getDescription()).equals("null"));
-        assertTrue((guests.getSkin()).equals("Default"));
-        assertTrue((guests.getLocale()).equals("en"));
-        assertTrue((guests.getAccessPermissions()).equals("[\"*:\\/platform\\/guests\"]"));
-        assertTrue((guests.getEditPermissions()).equals("[\"manager:\\/platform\\/guests\"]"));
-        assertTrue((guests.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/guests\\/pages\"}"));
-        assertTrue((guests.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/guests\\/navigation\"}"));
+        
+        assertEquals("/platform/guests", guests.getName());
+        assertEquals("space", guests.getType());
+        assertEquals("null", guests.getDisplayName());
+        assertEquals("null", guests.getDescription());
+        assertEquals("Default", guests.getSkin());
+        assertEquals("en", guests.getLocale());
+        assertEquals("[\"*:\\/platform\\/guests\"]", guests.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/guests\"]", guests.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/guests\\/pages\"}", guests.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/guests\\/navigation\"}", guests.getNavigation());
     }
 
     @Test
@@ -84,16 +74,17 @@ public class RestSpacesTest {
         String site = restService.getSite("/organization/management/executive-board", "space");
         assertNotNull(site);
         Site executive = jSonParser.siteParser(site);
-        assertTrue((executive.getName()).equals("/organization/management/executive-board"));
-        assertTrue((executive.getType()).equals("space"));
-        assertTrue((executive.getDisplayName()).equals("null"));
-        assertTrue((executive.getDescription()).equals("null"));
-        assertTrue((executive.getSkin()).equals("Default"));
-        assertTrue((executive.getLocale()).equals("en"));
-        assertTrue((executive.getAccessPermissions()).equals("[\"*:\\/organization\\/management\\/executive-board\"]"));
-        assertTrue((executive.getEditPermissions()).equals("[\"manager:\\/organization\\/management\\/executive-board\"]"));
-        assertTrue((executive.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/organization\\/management\\/executive-board\\/pages\"}"));
-        assertTrue((executive.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/organization\\/management\\/executive-board\\/navigation\"}"));
+        
+        assertEquals("/organization/management/executive-board", executive.getName());
+        assertEquals("space", executive.getType());
+        assertEquals("null", executive.getDisplayName());
+        assertEquals("null", executive.getDescription());
+        assertEquals("Default", executive.getSkin());
+        assertEquals("en", executive.getLocale());
+        assertEquals("[\"*:\\/organization\\/management\\/executive-board\"]", executive.getAccessPermissions());
+        assertEquals("[\"manager:\\/organization\\/management\\/executive-board\"]", executive.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/organization\\/management\\/executive-board\\/pages\"}", executive.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/organization\\/management\\/executive-board\\/navigation\"}", executive.getNavigation());
     }
 
     @Test
@@ -102,17 +93,17 @@ public class RestSpacesTest {
         String site = restService.getSite("/platform/administrators", "space");
         assertNotNull(site);
         Site administrators = jSonParser.siteParser(site);
-        assertTrue((administrators.getName()).equals("/platform/administrators"));
-        assertTrue((administrators.getType()).equals("space"));
-        assertTrue((administrators.getDisplayName()).equals("null"));
-        assertTrue((administrators.getDescription()).equals("null"));
-        assertTrue((administrators.getSkin()).equals("Default"));
-        assertTrue((administrators.getLocale()).equals("en"));
-        assertTrue((administrators.getAccessPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((administrators.getEditPermissions()).equals("[\"manager:\\/platform\\/administrators\"]"));
-        assertTrue((administrators.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/administrators\\/pages\"}"));
-        assertTrue((administrators.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/administrators\\/navigation\"}"));
-
+        
+        assertEquals("/platform/administrators", administrators.getName());
+        assertEquals("space", administrators.getType());
+        assertEquals("null", administrators.getDisplayName());
+        assertEquals("null", administrators.getDescription());
+        assertEquals("Default", administrators.getSkin());
+        assertEquals("en", administrators.getLocale());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", administrators.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/administrators\"]", administrators.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/administrators\\/pages\"}", administrators.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/administrators\\/navigation\"}", administrators.getNavigation());
     }
 
     @Test
@@ -121,17 +112,17 @@ public class RestSpacesTest {
         String site = restService.getSite("/platform/users", "space");
         assertNotNull(site);
         Site users = jSonParser.siteParser(site);
-        assertTrue((users.getName()).equals("/platform/users"));
-        assertTrue((users.getType()).equals("space"));
-        assertTrue(users.getDisplayName().equals("null"));
-        assertTrue((users.getDescription()).equals("null"));
-        assertTrue((users.getSkin()).equals("Default"));
-        assertTrue((users.getLocale()).equals("en"));
-        assertTrue((users.getAccessPermissions()).equals("[\"*:\\/platform\\/users\"]"));
-        assertTrue((users.getEditPermissions()).equals("[\"manager:\\/platform\\/users\"]"));
-        assertTrue((users.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/pages\"}"));
-        assertTrue((users.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/navigation\"}"));
-
+        
+        assertEquals("/platform/users", users.getName());
+        assertEquals("space", users.getType());
+        assertEquals("null", users.getDisplayName());
+        assertEquals("null", users.getDescription());
+        assertEquals("Default", users.getSkin());
+        assertEquals("en", users.getLocale());
+        assertEquals("[\"*:\\/platform\\/users\"]", users.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/users\"]", users.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/pages\"}", users.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/navigation\"}", users.getNavigation());
     }
 
     @Test
@@ -144,22 +135,24 @@ public class RestSpacesTest {
         int dashboardsCount = 0;
         for (Site site : spaceSites) {
             if (site.getName().equals("/platform/members") || site.getName().equals("/platform/managers")) {
-                dashboardsCount = dashboardsCount + 1;
+                dashboardsCount++;
             }
         }
-        assertEquals(dashboardsCount, 2);
+        assertEquals(2, dashboardsCount);
         String addedSite = restService.getSite("/platform/members", "space");
         Site newSpace = jSonParser.siteParser(addedSite);
-        assertTrue(newSpace.getName().equals("/platform/members"));
-        assertTrue(newSpace.getType().equals("space"));
-        assertTrue(newSpace.getDisplayName().equals("null"));
-        assertTrue(newSpace.getDescription().equals("null"));
-        assertTrue(newSpace.getSkin().equals("Default"));
-        assertTrue(newSpace.getLocale().equals("en"));
-        assertTrue(newSpace.getAccessPermissions().equals("[\"*:\\/platform\\/members\"]"));
-        assertTrue(newSpace.getEditPermissions().equals("[\"manager:\\/platform\\/members\"]"));
-        assertTrue(newSpace.getPages().equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/pages\"}"));
-        assertTrue(newSpace.getNavigation().equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/navigation\"}"));
+        
+        assertEquals("/platform/members", newSpace.getName());
+        assertEquals("space", newSpace.getType());
+        assertEquals("null", newSpace.getDisplayName());
+        assertEquals("null", newSpace.getDescription());
+        assertEquals("Default", newSpace.getSkin());
+        assertEquals("en", newSpace.getLocale());
+        assertEquals("[\"*:\\/platform\\/members\"]", newSpace.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/members\"]", newSpace.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/pages\"}", newSpace.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/navigation\"}", newSpace.getNavigation());
+
         restService.deleteSite("/platform/members", "space");
         restService.deleteSite("/platform/managers", "space");
     }
@@ -176,7 +169,6 @@ public class RestSpacesTest {
         System.out.println("**testUpdateSpace**");
         restService.addSite("/platform/members", "space");
         restService.addSite("/platform/managers", "space");
-        Site usersSpace;
         Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "/platform/users");
         attributes.put("type", "space");
@@ -187,19 +179,19 @@ public class RestSpacesTest {
         attributes.put("edit-permissions", "[\"manager:/platform/administrators\"]");
         restService.updateSite(attributes);
         String site = restService.getSite("/platform/users", "space");
-        System.out.println(site + "----------------");
-        usersSpace = jSonParser.siteParser(site);
-        assertTrue((usersSpace.getName()).equals("/platform/users"));
-        assertTrue((usersSpace.getType()).equals("space"));
-        assertTrue((usersSpace.getDisplayName()).equals("UpdatedUsersSpace"));
-        assertTrue((usersSpace.getDescription()).equals("Description of Users Space Updated"));
-        assertTrue((usersSpace.getSkin()).equals("Default"));
-        assertTrue((usersSpace.getLocale()).equals("fr"));
-        assertTrue((usersSpace.getAccessPermissions()).equals("[\"member:\\/platform\\/users\"]"));
-        assertTrue((usersSpace.getEditPermissions()).equals("[\"manager:\\/platform\\/administrators\"]"));
-        assertTrue((usersSpace.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/pages\"}"));
-        assertTrue((usersSpace.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/navigation\"}"));
-
+        Site usersSpace = jSonParser.siteParser(site);
+        
+        assertEquals("/platform/users", usersSpace.getName());
+        assertEquals("space", usersSpace.getType());
+        assertEquals("UpdatedUsersSpace", usersSpace.getDisplayName());
+        assertEquals("Description of Users Space Updated", usersSpace.getDescription());
+        assertEquals("Default", usersSpace.getSkin());
+        assertEquals("fr", usersSpace.getLocale());
+        assertEquals("[\"member:\\/platform\\/users\"]", usersSpace.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/administrators\"]", usersSpace.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/pages\"}", usersSpace.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/navigation\"}", usersSpace.getNavigation());
+        
         attributes.clear();
         attributes.put("name", "/platform/users");
         attributes.put("type", "space");
@@ -210,17 +202,18 @@ public class RestSpacesTest {
         attributes.put("locale", "en");
         restService.updateSite(attributes);
         usersSpace = jSonParser.siteParser(restService.getSite("/platform/users", "space"));
-        assertTrue((usersSpace.getName()).equals("/platform/users"));
-        assertTrue((usersSpace.getType()).equals("space"));
-        assertTrue((usersSpace.getDisplayName()).equals("null"));
-        assertTrue((usersSpace.getDescription()).equals("null"));
-        assertTrue((usersSpace.getSkin()).equals("Default"));
-        assertTrue((usersSpace.getLocale()).equals("en"));
-        assertTrue((usersSpace.getAccessPermissions()).equals("[\"*:\\/platform\\/users\"]"));
-        assertTrue((usersSpace.getEditPermissions()).equals("[\"manager:\\/platform\\/users\"]"));
-        assertTrue((usersSpace.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/pages\"}"));
-        assertTrue((usersSpace.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/navigation\"}"));
-
+        
+        assertEquals("/platform/members", usersSpace.getName());
+        assertEquals("space", usersSpace.getType());
+        assertEquals("null", usersSpace.getDisplayName());
+        assertEquals("null", usersSpace.getDescription());
+        assertEquals("Default", usersSpace.getSkin());
+        assertEquals("en", usersSpace.getLocale());
+        assertEquals("[\"*:\\/platform\\/users\"]", usersSpace.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/users\"]", usersSpace.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/pages\"}", usersSpace.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/users\\/navigation\"}", usersSpace.getNavigation());
+        
         attributes.clear();
         attributes.put("name", "/platform/members");
         attributes.put("type", "space");
@@ -231,16 +224,17 @@ public class RestSpacesTest {
         attributes.put("locale", "it");
         restService.updateSite(attributes);
         usersSpace = jSonParser.siteParser(restService.getSite("/platform/members", "space"));
-        assertTrue((usersSpace.getName()).equals("/platform/members"));
-        assertTrue((usersSpace.getType()).equals("space"));
-        assertTrue((usersSpace.getDisplayName()).equals("MemberSpaceUpdated"));
-        assertTrue((usersSpace.getDescription()).equals("Member Space Description Updated"));
-        assertTrue((usersSpace.getSkin()).equals("Default"));
-        assertTrue((usersSpace.getLocale()).equals("it"));
-        assertTrue((usersSpace.getAccessPermissions()).equals("[\"*:\\/platform\\/users\"]"));
-        assertTrue((usersSpace.getEditPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((usersSpace.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/pages\"}"));
-        assertTrue((usersSpace.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/navigation\"}"));
+        
+        assertEquals("/platform/members", usersSpace.getName());
+        assertEquals("space", usersSpace.getType());
+        assertEquals("MemberSpaceUpdated", usersSpace.getDisplayName());
+        assertEquals("Member Space Description Updated", usersSpace.getDescription());
+        assertEquals("Default", usersSpace.getSkin());
+        assertEquals("it", usersSpace.getLocale());
+        assertEquals("[\"*:\\/platform\\/users\"]", usersSpace.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/administrators\"]", usersSpace.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/pages\"}", usersSpace.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/navigation\"}", usersSpace.getNavigation());
 
         attributes.clear();
         attributes.put("name", "/platform/members");
@@ -252,16 +246,18 @@ public class RestSpacesTest {
         attributes.put("locale", "en");
         restService.updateSite(attributes);
         usersSpace = jSonParser.siteParser(restService.getSite("/platform/members", "space"));
-        assertTrue((usersSpace.getName()).equals("/platform/members"));
-        assertTrue((usersSpace.getType()).equals("space"));
-        assertTrue((usersSpace.getDisplayName()).equals("null"));
-        assertTrue((usersSpace.getDescription()).equals("null"));
-        assertTrue((usersSpace.getSkin()).equals("Default"));
-        assertTrue((usersSpace.getLocale()).equals("en"));
-        assertTrue((usersSpace.getAccessPermissions()).equals("[\"*:\\/platform\\/members\"]"));
-        assertTrue((usersSpace.getEditPermissions()).equals("[\"manager:\\/platform\\/members\"]"));
-        assertTrue((usersSpace.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/pages\"}"));
-        assertTrue((usersSpace.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/navigation\"}"));
+        
+        assertEquals("/platform/members", usersSpace.getName());
+        assertEquals("space", usersSpace.getType());
+        assertEquals("null", usersSpace.getDisplayName());
+        assertEquals("null", usersSpace.getDescription());
+        assertEquals("Default", usersSpace.getSkin());
+        assertEquals("en", usersSpace.getLocale());
+        assertEquals("[\"*:\\/platform\\/members\"]", usersSpace.getAccessPermissions());
+        assertEquals("[\"manager:\\/platform\\/members\"]", usersSpace.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/pages\"}", usersSpace.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/spaces\\/platform\\/members\\/navigation\"}", usersSpace.getNavigation());
+        
         restService.deleteSite("/platform/members", "space");
         restService.deleteSite("/platform/managers", "space");
     }

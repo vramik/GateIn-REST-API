@@ -1,39 +1,33 @@
 package org.gatein.rest.api;
 
-/**
- *
- * @author mgottval
- */
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.gatein.rest.constants.ConstantsService;
 import static org.gatein.rest.constants.RestConstants.REST_API_URL;
 import org.gatein.rest.entity.Site;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ *
+ * @author vramik
+ */
 public class RestSitesTest {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
     }
 
     @Test
@@ -41,19 +35,17 @@ public class RestSitesTest {
         System.out.println("**testGetClassicSite**");
         String site = restService.getSite("classic", "site");
         assertNotNull(site);
-        System.out.println(site);
         Site classic = jSonParser.siteParser(site);
-        assertTrue((classic.getName()).equals("classic"));
-        assertTrue((classic.getType()).equals("site"));
-        assertTrue((classic.getDisplayName()).equals("Classic"));
-        assertTrue((classic.getDescription()).equals("JBoss Portal default portal"));
-        assertTrue((classic.getSkin()).equals("JppSkin"));
-        assertTrue((classic.getLocale()).equals("en"));
-        assertTrue((classic.getAccessPermissions()).equals("[\"Everyone\"]"));
-        assertTrue((classic.getEditPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((classic.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/pages\"}"));
-        assertTrue((classic.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/navigation\"}"));
-
+        assertEquals("classic", classic.getName());
+        assertEquals("site", classic.getType());
+        assertEquals("Classic", classic.getDisplayName());
+        assertEquals("JBoss Portal default portal", classic.getDescription());
+        assertEquals("JppSkin", classic.getSkin());
+        assertEquals("en", classic.getLocale());
+        assertEquals("[\"Everyone\"]", classic.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", classic.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/pages\"}", classic.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/navigation\"}", classic.getNavigation());
     }
 
     @Test
@@ -62,16 +54,16 @@ public class RestSitesTest {
         String site = restService.getSite("mobile", "site");
         assertNotNull(site);
         Site mobile = jSonParser.siteParser(site);
-        assertTrue((mobile.getName()).equals("mobile"));
-        assertTrue((mobile.getType()).equals("site"));
-        assertTrue((mobile.getDisplayName()).equals("Mobile"));
-        assertTrue((mobile.getDescription()).equals("JBoss Portal default mobile portal"));
-        assertTrue((mobile.getSkin()).equals("ResponsiveSkin"));
-        assertTrue((mobile.getLocale()).equals("en"));
-        assertTrue((mobile.getAccessPermissions()).equals("[\"Everyone\"]"));
-        assertTrue((mobile.getEditPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((mobile.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/mobile\\/pages\"}"));
-        assertTrue((mobile.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/mobile\\/navigation\"}"));
+        assertEquals("mobile", mobile.getName());
+        assertEquals("site", mobile.getType());
+        assertEquals("Mobile", mobile.getDisplayName());
+        assertEquals("JBoss Portal default mobile portal", mobile.getDescription());
+        assertEquals("ResponsiveSkin", mobile.getSkin());
+        assertEquals("en", mobile.getLocale());
+        assertEquals("[\"Everyone\"]", mobile.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", mobile.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/mobile\\/pages\"}", mobile.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/mobile\\/navigation\"}", mobile.getNavigation());
     }
 
     @Test
@@ -88,16 +80,16 @@ public class RestSitesTest {
         String site = restService.getSite("newSite", "site");
         assertNotNull(site);
         Site newSite = jSonParser.siteParser(site);
-        assertTrue((newSite.getName()).equals("newSite"));
-        assertTrue((newSite.getType()).equals("site"));
-        assertTrue((newSite.getDisplayName()).equals("Basic Portal"));
-        assertTrue((newSite.getDescription()).equals("This is basic portal template"));
-        assertTrue((newSite.getSkin()).equals("Default"));
-        assertTrue((newSite.getLocale()).equals("en"));
-        assertTrue((newSite.getAccessPermissions()).equals("[\"Everyone\"]"));
-        assertTrue((newSite.getEditPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((newSite.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/newSite\\/pages\"}"));
-        assertTrue((newSite.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/newSite\\/navigation\"}"));
+        assertEquals("newSite", newSite.getName());
+        assertEquals("site", newSite.getType());
+        assertEquals("Basic Portal", newSite.getDisplayName());
+        assertEquals("This is basic portal template", newSite.getDescription());
+        assertEquals("Default", newSite.getSkin());
+        assertEquals("en", newSite.getLocale());
+        assertEquals("[\"Everyone\"]", newSite.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", newSite.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/newSite\\/pages\"}", newSite.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/newSite\\/navigation\"}", newSite.getNavigation());
         restService.deleteSite("newSite", "site");
     }
 
@@ -137,16 +129,16 @@ public class RestSitesTest {
         restService.updateSite(attributes);
         String site = restService.getSite("classic", "site");
         classic = jSonParser.siteParser(site);
-        assertTrue((classic.getName()).equals("classic"));
-        assertTrue((classic.getType()).equals("site"));
-        assertTrue((classic.getDisplayName()).equals("ClassicUpdated"));
-        assertTrue((classic.getDescription()).equals("Description of Classic Updated"));
-        assertTrue((classic.getSkin()).equals("JppSkin"));
-        assertTrue((classic.getLocale()).equals("fr"));
-        assertTrue((classic.getAccessPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((classic.getEditPermissions()).equals("[\"*:\\/platform\\/guests\"]"));
-        assertTrue((classic.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/pages\"}"));
-        assertTrue((classic.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/navigation\"}"));
+        assertEquals("classic", classic.getName());
+        assertEquals("site", classic.getType());
+        assertEquals("ClassicUpdated", classic.getDisplayName());
+        assertEquals("Description of Classic Updated", classic.getDescription());
+        assertEquals("JppSkin", classic.getSkin());
+        assertEquals("fr", classic.getLocale());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", classic.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/guests\"]", classic.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/pages\"}", classic.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/navigation\"}", classic.getNavigation());
 
         attributes.clear();
         attributes.put("name", "classic");
@@ -159,16 +151,16 @@ public class RestSitesTest {
         restService.updateSite(attributes);
         String siteRestore = restService.getSite("classic", "site");
         Site classicRestore = jSonParser.siteParser(siteRestore);
-        assertTrue((classicRestore.getName()).equals("classic"));
-        assertTrue((classicRestore.getType()).equals("site"));
-        assertTrue((classicRestore.getDisplayName()).equals("Classic"));
-        assertTrue((classicRestore.getDescription()).equals("JBoss Portal default portal"));
-        assertTrue((classicRestore.getSkin()).equals("JppSkin"));
-        assertTrue((classicRestore.getLocale()).equals("en"));
-        assertTrue((classicRestore.getAccessPermissions()).equals("[\"Everyone\"]"));
-        assertTrue((classicRestore.getEditPermissions()).equals("[\"*:\\/platform\\/administrators\"]"));
-        assertTrue((classicRestore.getPages()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/pages\"}"));
-        assertTrue((classicRestore.getNavigation()).equals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/navigation\"}"));
+        assertEquals("classic", classicRestore.getName());
+        assertEquals("site", classicRestore.getType());
+        assertEquals("Classic", classicRestore.getDisplayName());
+        assertEquals("JBoss Portal default portal", classicRestore.getDescription());
+        assertEquals("JppSkin", classicRestore.getSkin());
+        assertEquals("en", classicRestore.getLocale());
+        assertEquals("[\"Everyone\"]", classicRestore.getAccessPermissions());
+        assertEquals("[\"*:\\/platform\\/administrators\"]", classicRestore.getEditPermissions());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/pages\"}", classicRestore.getPages());
+        assertEquals("{\"url\":\"" + REST_API_URL + "\\/sites\\/classic\\/navigation\"}", classicRestore.getNavigation());
 
     }
 

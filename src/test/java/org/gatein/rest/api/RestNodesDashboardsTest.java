@@ -1,14 +1,12 @@
 package org.gatein.rest.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import org.gatein.rest.constants.ConstantsService;
 import org.gatein.rest.entity.Navigation;
 import org.gatein.rest.entity.Node;
 import org.gatein.rest.entity.Page;
 import org.gatein.rest.helper.JSonParser;
-import org.gatein.rest.service.api.HelpingServiceApi;
-import org.gatein.rest.service.impl.HelpingService;
 import org.gatein.rest.service.impl.RestService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -26,16 +24,12 @@ import org.json.simple.parser.ParseException;
  */
 public class RestNodesDashboardsTest {
 
-    private HelpingServiceApi helpingService;
     private RestService restService;
-    private ConstantsService constantsService;
     private final JSonParser jSonParser = new JSonParser();
 
     @Before
     public void before() {
-        helpingService = new HelpingService();
-        constantsService = new ConstantsService();
-        restService = new RestService(helpingService, constantsService);
+        restService = new RestService();
     }
 
     @Test
@@ -48,19 +42,19 @@ public class RestNodesDashboardsTest {
         String node = restService.getNode("newNode", "mary", "dashboard");
         assertNotNull(node);
         Node newNode = jSonParser.nodeParser(node);
-        assertTrue((newNode.getName()).equals("newNode"));
-        assertTrue((newNode.getUri()).equals("/portal/u/mary/newNode"));
-        assertTrue((newNode.getIsVisible()).equals("true"));
-        assertTrue((newNode.getVisibility()).equals("VISIBLE"));
-        assertTrue((newNode.getIconName()).equals("null"));
-        assertTrue((newNode.getDisplayName()).equals("newNode"));
-        assertTrue((newNode.getChildren()) == null);
+        
+        assertEquals("newNode", newNode.getName());
+        assertEquals("/portal/u/mary/newNode", newNode.getUri());
+        assertEquals("true", newNode.getIsVisible());
+        assertEquals("VISIBLE", newNode.getVisibility());
+        assertEquals("null", newNode.getIconName());
+        assertEquals("newNode", newNode.getDisplayName());
+        assertNull(newNode.getChildren());
         assertNull(newNode.getPage());
 
         String jSonNavigation = restService.getNavigation("dashboard", "mary", false);
         Navigation navigationAdded = jSonParser.navigationParser(jSonNavigation);
-        int nodesCount = navigationAdded.getNodes().size();
-        assertEquals(4, nodesCount);
+        assertEquals(4, navigationAdded.getNodes().size());
         restService.deleteNode("newNode", "mary", "dashboard");
         restService.deleteNode("newNode2", "mary", "dashboard");
         restService.deleteNode("newNode3", "mary", "dashboard");
@@ -74,18 +68,21 @@ public class RestNodesDashboardsTest {
         String node1 = restService.getNode("Tab_Default", "mary", "dashboard");
         assertNotNull(node1);
         Node site = jSonParser.nodeParser(node1);
-        assertTrue((site.getName()).equals("Tab_Default"));
-        assertTrue((site.getUri()).equals("/portal/u/mary/Tab_Default"));
-        assertTrue((site.getIsVisible()).equals("true"));
-        assertTrue((site.getVisibility()).equals("VISIBLE"));
-        assertTrue((site.getIconName()).equals("null"));
-        assertTrue((site.getDisplayName()).equals("Tab_Default"));
+        
+        assertEquals("Tab_Default", site.getName());
+        assertEquals("/portal/u/mary/Tab_Default", site.getUri());
+        assertEquals("true", site.getIsVisible());
+        assertEquals("VISIBLE", site.getVisibility());
+        assertEquals("null", site.getIconName());
+        assertEquals("Tab_Default", site.getDisplayName());
         assertNull(site.getChildren());
+
         Page page = site.getPage();
-        assertTrue(page.getName().equals("Tab_Default"));
-        assertTrue(page.getSiteName().equals("mary"));
-        assertTrue(page.getSiteType().equals("dashboard"));
-        assertTrue(page.getURL().equals(REST_API_URL + "/dashboards/mary/pages/Tab_Default"));
+        assertEquals("Tab_Default", page.getName());
+        assertEquals("mary", page.getSiteName());
+        assertEquals("dashboard", page.getSiteType());
+        assertEquals(REST_API_URL + "/dashboards/mary/pages/Tab_Default", page.getURL());
+        
         restService.deleteSite("mary", "dashboard");
     }
 
@@ -107,21 +104,20 @@ public class RestNodesDashboardsTest {
         restService.createNode("newNode3", "mary", "dashboard");
         String navigationString = restService.getNavigation("dashboard", "mary", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("3"));
-        assertTrue(navigation.getSiteName().equals("mary"));
-        assertTrue(navigation.getSiteType().equals("dashboard"));
-        Object[] pagesArray = navigation.getNodes().toArray();
-        assertTrue(((Node) pagesArray[0]).getName().equals("Tab_Default"));
-        assertTrue(((Node) pagesArray[0]).getUri().equals(REST_API_URL + "/dashboards/mary/navigation/Tab_Default"));
-
-        assertTrue(((Node) pagesArray[1]).getName().equals("newNode"));
-        assertTrue(((Node) pagesArray[1]).getUri().equals(REST_API_URL + "/dashboards/mary/navigation/newNode"));
-
-        assertTrue(((Node) pagesArray[2]).getName().equals("newNode2"));
-        assertTrue(((Node) pagesArray[2]).getUri().equals(REST_API_URL + "/dashboards/mary/navigation/newNode2"));
-
-        assertTrue(((Node) pagesArray[3]).getName().equals("newNode3"));
-        assertTrue(((Node) pagesArray[3]).getUri().equals(REST_API_URL + "/dashboards/mary/navigation/newNode3"));
+        assertEquals("3", navigation.getPriority());
+        assertEquals("mary", navigation.getSiteName());
+        assertEquals("dashboard", navigation.getSiteType());
+        
+        List<Node> nodes = navigation.getNodes();
+        assertEquals("Tab_Default", nodes.get(0).getName());
+        assertEquals(REST_API_URL + "/dashboards/mary/navigation/Tab_Default", nodes.get(0).getUri());
+        assertEquals("newNode", nodes.get(1).getName());
+        assertEquals(REST_API_URL + "/dashboards/mary/navigation/newNode", nodes.get(1).getUri());
+        assertEquals("newNode2", nodes.get(2).getName());
+        assertEquals(REST_API_URL + "/dashboards/mary/navigation/newNode2", nodes.get(2).getUri());
+        assertEquals("newNode3", nodes.get(3).getName());
+        assertEquals(REST_API_URL + "/dashboards/mary/navigation/newNode3", nodes.get(3).getUri());
+        
         restService.deleteNode("newNode", "mary", "dashboard");
         restService.deleteNode("newNode2", "mary", "dashboard");
         restService.deleteNode("newNode3", "mary", "dashboard");
@@ -138,8 +134,6 @@ public class RestNodesDashboardsTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("name", "newNode");
         attributes.put("type", "dashboard");
-
-        //     attributes.put("visibility", "{\"status\" : \"INVISIBLE\"}");
         attributes.put("iconName", "Ticket");
         attributes.put("displayName", "Updated Node");
 
@@ -147,21 +141,18 @@ public class RestNodesDashboardsTest {
         String node = restService.getNode("newNode", "mary", "dashboard");
         Node homeNode = jSonParser.nodeParser(node);
 
-        assertTrue((homeNode.getName()).equals("newNode"));
-        assertTrue((homeNode.getUri()).equals("/portal/u/mary/newNode"));
-        assertTrue((homeNode.getIsVisible()).equals("true"));
-        assertTrue((homeNode.getVisibility()).equals("VISIBLE"));
-        assertTrue((homeNode.getIconName()).equals("Ticket"));
-        assertTrue((homeNode.getDisplayName()).equals("Updated Node"));
+        assertEquals("newNode", homeNode.getName());
+        assertEquals("/portal/u/mary/newNode", homeNode.getUri());
+        assertEquals("true", homeNode.getIsVisible());
+        assertEquals("VISIBLE", homeNode.getVisibility());
+        assertEquals("Ticket", homeNode.getIconName());
+        assertEquals("Updated Node", homeNode.getDisplayName());
         assertNull(homeNode.getChildren());
         assertNull(homeNode.getPage());
-
 
         attributes.clear();
         attributes.put("name", "Tab_Default");
         attributes.put("type", "dashboard");
-
-        //     attributes.put("visibility", "{\"status\" : \"INVISIBLE\"}");
         attributes.put("iconName", "Ticket");
         attributes.put("displayName", "Updated Default Node");
 
@@ -169,18 +160,18 @@ public class RestNodesDashboardsTest {
         String defNode = restService.getNode("Tab_Default", "mary", "dashboard");
         Node dNode = jSonParser.nodeParser(defNode);
 
-        assertTrue((dNode.getName()).equals("Tab_Default"));
-        assertTrue((dNode.getUri()).equals("/portal/u/mary/Tab_Default"));
-        assertTrue((dNode.getIsVisible()).equals("true"));
-        assertTrue((dNode.getVisibility()).equals("VISIBLE"));
-        assertTrue((dNode.getIconName()).equals("Ticket"));
-        assertTrue((dNode.getDisplayName()).equals("Updated Default Node"));
+        assertEquals("Tab_Default", homeNode.getName());
+        assertEquals("/portal/u/mary/Tab_Default", homeNode.getUri());
+        assertEquals("true", homeNode.getIsVisible());
+        assertEquals("VISIBLE", homeNode.getVisibility());
+        assertEquals("Ticket", homeNode.getIconName());
+        assertEquals("Updated Default Node", homeNode.getDisplayName());
         assertNull(dNode.getChildren());
         Page page = dNode.getPage();
-        assertTrue(page.getName().equals("Tab_Default"));
-        assertTrue(page.getSiteName().equals("mary"));
-        assertTrue(page.getSiteType().equals("dashboard"));
-        assertTrue(page.getURL().equals(REST_API_URL + "/dashboards/mary/pages/Tab_Default"));
+        assertEquals("Tab_Default", page.getName());
+        assertEquals("mary", page.getSiteName());
+        assertEquals("dashboard", page.getSiteType());
+        assertEquals(REST_API_URL + "/dashboards/mary/pages/Tab_Default", page.getURL());
         restService.deleteNode("newNode", "mary", "dashboard");
         restService.deleteNode("newNode2", "mary", "dashboard");
         restService.deleteNode("newNode3", "mary", "dashboard");
@@ -200,12 +191,12 @@ public class RestNodesDashboardsTest {
 
         String navigationString = restService.getNavigation("dashboard", "mary", false);
         Navigation navigation = jSonParser.navigationParser(navigationString);
-        assertTrue(navigation.getPriority().equals("3"));
-        assertTrue(navigation.getSiteName().equals("mary"));
-        assertTrue(navigation.getSiteType().equals("dashboard"));
-        Object[] pagesArray = navigation.getNodes().toArray();
+        
+        assertEquals("3", navigation.getPriority());
+        assertEquals("mary", navigation.getSiteName());
+        assertEquals("dashboard", navigation.getSiteType());
 
-        assertEquals(pagesArray.length, 1);
+        assertEquals(1, navigation.getNodes().size());
 
         restService.deleteSite("mary", "dashboard");
     }
